@@ -25,16 +25,17 @@ class Reservation extends Model
     
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function cafe()
     {
-        return $this->belongsTo(Cafe::class);
+        return $this->belongsTo(Cafe::class, 'cafe_id');
     }
 
     public function table()
     {
         return $this->belongsTo(Table::class, 'table_id');
     }
+
 }

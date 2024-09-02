@@ -25,6 +25,9 @@ Route::middleware('auth')->group(function () {
     // Display a single reservation
     Route::get('/reservations/{reservation}', [ReservationController::class, 'show'])->name('reservations.show');
 
+    // Display User's Reservation
+    Route::get('/reservations', [ReservationController::class, 'userReservations'])->name('reservations.user');
+    
     // Display all reservations for the owner to manage
     Route::get('/cafes/{cafe}/manage_reservations', [ReservationController::class, 'manage'])->name('reservations.manage');
 

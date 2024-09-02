@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=`, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>CafeReserve</title>
   <link rel="stylesheet" href="<?php echo asset('css/style.css')?>" type="text/css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
@@ -47,7 +46,6 @@
 
         <!-- Right-aligned elements -->
         <div class="d-flex ml-auto align-items-center">
-          <a class="nav-link" href="{{ route('cafes.index') }}">Cafes</a>
           <a class="nav-link" href="{{ route('reservations.search') }}">Reserve Now</a>
           <div class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
@@ -55,6 +53,7 @@
               User
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+              <a class="dropdown-item" href="{{ route('reservations.user') }}">My Reservations</a>
               <a class="dropdown-item" href="/show">Manage Account</a>
               <a class="dropdown-item" href="/change_password">Change Password</a>
               <form class="dropdown-item" method="POST" action="/logout" style="display:inline;">

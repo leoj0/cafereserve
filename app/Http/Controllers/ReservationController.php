@@ -90,15 +90,15 @@ class ReservationController extends Controller
     public function edit(Cafe $cafe, Reservation $reservation)
     {
         // Get available tables for the cafe
-        $tables = $cafe->tables()->where('availability_status', 'available')->get();
+        $tables = $cafe->tables()->where('availability_status', 'Available')->get();
 
         return view('reservations.edit', compact('cafe', 'reservation', 'tables'));
     }
 
-    public function destroy(Reservation $reservation)
+    public function destroy(Cafe $cafe, Reservation $reservation)
     {
         $reservation->delete();
-        return redirect()->route('reservations.manage', ['cafe' => $reservation->cafe_id])->with('message', 'Reservation deleted successfully');
+        return redirect()->route('reservations.user')->with('success', 'Reservation deleted successfully.');
     }
 
     public function manage(Cafe $cafe)
@@ -126,9 +126,15 @@ class ReservationController extends Controller
     {
         // Handle requests without input data
         if ($request->isMethod('get') && !$request->hasAny(['reservation_date', 'start_time', 'end_time'])) {
-            return view('reservations.select-tables', ['cafe' => $cafe, 'tables' => collect()]);
+            return view('reservations.select-tables', [
+                'cafe' => $cafe,
+                'tables' => collect(),
+                'reservation_date' => null,
+                'start_time' => null,
+                'end_time' => null,
+            ]);
         }
-    
+        
         // Validate the input data with custom error messages
         $validated = $request->validate([
             'reservation_date' => 'required|date|after_or_equal:today',
@@ -136,17 +142,35 @@ class ReservationController extends Controller
             'end_time' => 'required|date_format:H:i|after:start_time',
         ], [
             'end_time.after' => 'The end time must be a time after the start time.',
+            'reservation_date.after_or_equal' => 'The reservation date must be today or a future date.',
         ]);
-    
+        
         // Retrieve and filter tables based on the validated request parameters
         $tables = Table::where('cafe_id', $cafe->cafe_id)
                        ->filter($request->only(['reservation_date', 'start_time', 'end_time']))
                        ->get();
-    
+        
         return view('reservations.select-tables', [
             'cafe' => $cafe,
             'tables' => $tables,
+            'reservation_date' => $request->input('reservation_date'),
+            'start_time' => $request->input('start_time'),
+            'end_time' => $request->input('end_time'),
         ]);
     }
 
+    public function userReservations()
+    {
+        $user = auth()->user();
+    
+        if ($user) {
+            $reservations = $user->reservations()
+                                  ->with('cafe', 'table') // Ensure both relationships are eager-loaded
+                                  ->get();
+    
+            return view('reservations.user-reservations', compact('reservations'));
+        } else {
+            return redirect()->route('login');
+        }
+    }
 }
