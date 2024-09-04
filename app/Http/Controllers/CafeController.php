@@ -48,7 +48,6 @@ class CafeController extends Controller
             'cafe_tags' => 'required|string',
             'location' => 'required',
             'email' => 'required|email|max:255',
-            'website' => 'required|url|max:255',
             'description' => 'required|string',
             'opening_time' => 'required|string',
             'closing_time' => 'required|string'
@@ -93,7 +92,6 @@ class CafeController extends Controller
             'cafe_tags' => 'required|string',
             'location' => 'required',
             'email' => 'required|email|max:255',
-            'website' => 'required|url|max:255',
             'description' => 'required|string',
             'opening_time' => 'required|string',
             'closing_time' => 'required|string'

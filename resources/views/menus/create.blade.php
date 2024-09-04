@@ -9,23 +9,29 @@
             <input type="hidden" name="cafe_id" value="{{ $cafe->cafe_id }}">
 
             <!-- Menu Item Name -->
-            <div class="mb-6">
+            <div>
                 <label for="item_name" class="block text-lg font-medium text-gray-700">Item Name</label>
                 <input type="text" name="item_name" id="item_name" required
                     class="mt-2 block w-full rounded-md border-2 border-gray-400 shadow-sm text-lg p-3 focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg"
                     value="{{ old('item_name') }}">
             </div>
+            @error('item_name')
+                <div class="text-red-500 mt-1">{{ $message }}</div>
+            @enderror
 
             <!-- Menu Item Description -->
-            <div class="mb-6">
+            <div class="mt-6">
                 <label for="item_description" class="block text-lg font-medium text-gray-700">Item Description</label>
                 <textarea name="item_description" id="item_description" rows="6"
                     class="mt-2 block w-full rounded-md border-2 border-gray-400 shadow-sm text-lg p-3 focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg"
                     placeholder="Describe the menu item">{{ old('item_description') }}</textarea>
             </div>
+            @error('item_description')
+                <div class="text-red-500 mt-1">{{ $message }}</div>
+            @enderror
 
             <!-- Price -->
-            <div class="mb-6">
+            <div class="mt-6">
                 <label for="price" class="block text-lg font-medium text-gray-700">Price</label>
                 <div class="relative mt-2">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500 text-lg">
@@ -36,13 +42,19 @@
                         value="{{ old('price') }}">
                 </div>
             </div>
+            @error('price')
+                <div class="text-red-500 mt-1">{{ $message }}</div>
+            @enderror
 
             <!-- Item Image -->
-            <div class="mb-6">
+            <div class="mt-6">
                 <label for "item_image" class="block text-lg font-medium text-gray-700">Item Image</label>
                 <input type="file" name="item_image" id="item_image"
                     class="mt-2 block w-full text-lg text-gray-500 file:mr-4 file:py-3 file:px-4 file:text-lg file:font-semibold file:text-blue-700 hover:file:bg-blue-100">
             </div>
+            @error('item_image')
+                <div class="text-red-500 mt-1">{{ $message }}</div>
+            @enderror
 
             <!-- Submit Button -->
             <div class="mt-8">

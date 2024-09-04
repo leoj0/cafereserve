@@ -83,17 +83,51 @@ class ReservationController extends Controller
     
         // Redirect with success message
         return redirect()->route('landing', ['cafe' => $cafe_id])
-                         ->with('message', 'Reservation successfully created');
+                         ->with('message', 'Reservation created successfully');
     }
     
 
     public function edit(Cafe $cafe, Reservation $reservation)
     {
-        // Get available tables for the cafe
-        $tables = $cafe->tables()->where('availability_status', 'Available')->get();
-
-        return view('reservations.edit', compact('cafe', 'reservation', 'tables'));
+        // Check if the authenticated user is the owner of the reservation
+        if ($reservation->user_id !== auth()->id()) {
+            return redirect()->route('reservations.user')->with('error', 'You are not authorized to edit this reservation.');
+        }
+    
+        // Pass the existing reservation data to the view
+        return view('reservations.edit', [
+            'cafe' => $cafe,
+            'reservation' => $reservation,
+            'guest_number' => $reservation->guest_number,
+            'reservation_date' => $reservation->reservation_date,
+            'start_time' => $reservation->start_time,
+            'end_time' => $reservation->end_time,
+            'special_request' => $reservation->special_request,
+            'table' => $reservation->table,
+        ]);
     }
+
+    public function update(Request $request, Cafe $cafe, Reservation $reservation)
+    {
+        // Validate the input data
+        $validated = $request->validate([
+            'guest_number' => 'required|integer|min:1',
+            'special_request' => 'nullable|string|max:255',
+        ]);
+    
+        // Ensure the user is authorized to update this reservation
+        if ($reservation->user_id !== auth()->id()) {
+            return redirect()->route('reservations.user')->with('error', 'You are not authorized to update this reservation.');
+        }
+    
+        // Update the reservation details
+        $reservation->update($validated);
+    
+        // Redirect back to the user's reservations with a success message
+        return redirect()->route('reservations.user')->with('message', 'Reservation updated successfully.');
+    }
+    
+    
 
     public function destroy(Cafe $cafe, Reservation $reservation)
     {

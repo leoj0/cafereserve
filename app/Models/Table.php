@@ -15,7 +15,7 @@ class Table extends Model
         'cafe_id',             
         'table_number',        
         'seating_capacity',    
-        'location',            
+        'position',            
         'availability_status',
     ];
 

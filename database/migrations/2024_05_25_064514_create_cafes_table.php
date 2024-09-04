@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('cafe_tags');
             $table->string('location');
             $table->string('email');
-            $table->string('website');
             $table->longText('description');
             $table->time('opening_time')->nullable();
             $table->time('closing_time')->nullable();

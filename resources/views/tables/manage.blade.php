@@ -16,7 +16,7 @@
                   <tr>
                       <th class="py-3 px-6 bg-gray-200 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Table Number</th>
                       <th class="py-3 px-6 bg-gray-200 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Seating Capacity</th>
-                      <th class="py-3 px-6 bg-gray-200 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Location</th>
+                      <th class="py-3 px-6 bg-gray-200 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Position</th>
                       <th class="py-3 px-6 bg-gray-200 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Status</th>
                       <th class="py-3 px-6 bg-gray-200 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Actions</th>
                   </tr>
@@ -26,7 +26,7 @@
                       <tr class="border-b">
                           <td class="py-4 px-6">{{ $table->table_number }}</td>
                           <td class="py-4 px-6">{{ $table->seating_capacity }}</td>
-                          <td class="py-4 px-6">{{ $table->location ?? 'N/A' }}</td>
+                          <td class="py-4 px-6">{{ $table->position ?? 'N/A' }}</td>
                           <td class="py-4 px-6">
                               <span class="px-4 py-2 inline-flex text-sm leading-5 font-semibold rounded-full bg-{{ $table->availability_status === 'Available' ? 'green' : 'red' }}-100 text-{{ $table->availability_status === 'Available' ? 'green' : 'red' }}-800">
                                   {{ ucfirst($table->availability_status) }}

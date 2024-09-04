@@ -9,18 +9,18 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('tables', function (Blueprint $table) {
-            $table->id('table_id');
+        Schema::create('feedbacks', function (Blueprint $table) {
+            $table->id('feedback_id');
             $table->unsignedBigInteger('cafe_id');
-            $table->integer('table_number')->unique();
-            $table->integer('seating_capacity');
-            $table->string('position')->nullable();
-            $table->enum('availability_status', ['Available', 'Reserved'])->default('Available');
+            $table->unsignedBigInteger('user_id');
+            $table->text('comments');
+            $table->unsignedTinyInteger('rating'); // Rating out of 5
             $table->timestamps();
 
             $table->foreign('cafe_id')->references('cafe_id')->on('cafes')->onDelete('cascade');
+            $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tables');
+        Schema::dropIfExists('feedbacks');
     }
 };

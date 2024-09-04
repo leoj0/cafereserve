@@ -53,7 +53,8 @@
               User
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-              <a class="dropdown-item" href="{{ route('reservations.user') }}">My Reservations</a>
+              <a class="dropdown-item" href="{{ route('reservations.user') }}">Reservations</a>
+              <a class="dropdown-item" href="{{ route('feedback.user') }}">Feedback</a>
               <a class="dropdown-item" href="/show">Manage Account</a>
               <a class="dropdown-item" href="/change_password">Change Password</a>
               <form class="dropdown-item" method="POST" action="/logout" style="display:inline;">

@@ -17,7 +17,6 @@ class Cafe extends Model
         'email',
         'cafe_tags',
         'location',
-        'website',
         'description',
         'opening_time',
         'closing_time',
@@ -45,6 +44,11 @@ class Cafe extends Model
         if ($filters['location'] ?? false) {
             $query->where('location', 'like', '%' . $filters['location'] . '%');
         }
+    }
+
+    public function feedbacks()
+    {
+        return $this->hasMany(Feedback::class, 'cafe_id');
     }
 
     public function menus()

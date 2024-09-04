@@ -14,8 +14,6 @@ $cafeId = auth()->user()->cafe->cafe_id ?? null;
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
-  <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
 <body>
@@ -29,22 +27,23 @@ $cafeId = auth()->user()->cafe->cafe_id ?? null;
 
         <!-- Right-aligned elements -->
         <div class="d-flex ml-auto align-items-center">
-
           <!-- Notification or alert if cafe does not exist -->
           @if($cafeId)
-            <div class="nav-item dropdown">
-              <a class="nav-link" href="{{route('menus.manage', ['cafe' => $cafeId])}}">Menu</a>
+          <div class="flex nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="cafeDropdown" role="button" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              Cafe
+            </a>
+            <div class="dropdown-menu" aria-labelledby="cafeDropdown">
+              <a class="dropdown-item" href="{{route('cafes.manage', ['cafe' => $cafeId])}}">Cafe</a>
+              <a class="dropdown-item" href="{{route('menus.manage', ['cafe' => $cafeId])}}">Menu</a>
+              <a class="dropdown-item" href="{{route('tables.manage', ['cafe' => $cafeId])}}">Table</a>
             </div>
-            <div class="nav-item dropdown">
-              <a class="nav-link" href="{{route('cafes.manage', ['cafe' => $cafeId])}}">Cafe</a>
-            </div>
-            <div class="nav-item dropdown">
-              <a class="nav-link" href="{{route('tables.manage', ['cafe' => $cafeId])}}">Table</a>
-            </div>
-          @else
+            @else
             <div class="nav-item dropdown">
               <a class="nav-link" href="{{route('cafes.create')}}">Create Cafe</a>
             </div>
+          </div>
           @endif
 
           <!-- User Dropdown -->
@@ -107,9 +106,9 @@ $cafeId = auth()->user()->cafe->cafe_id ?? null;
     };
   </script>
 
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
     flatpickr('#opening_time', {
       enableTime: true,
       noCalendar: true,
@@ -121,7 +120,7 @@ $cafeId = auth()->user()->cafe->cafe_id ?? null;
       dateFormat: 'H:i'
     });
   });
-</script>
+  </script>
 
 </body>
 

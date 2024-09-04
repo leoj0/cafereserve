@@ -25,12 +25,12 @@
                   value="{{ old('seating_capacity', $table->seating_capacity) }}">
           </div>
 
-          <!-- Location -->
+          <!-- Position -->
           <div class="mb-6">
-              <label for="location" class="block text-lg font-medium text-gray-700">Location</label>
-              <input type="text" name="location" id="location"
+              <label for="position" class="block text-lg font-medium text-gray-700">Position</label>
+              <input type="text" name="position" id="position"
                   class="mt-2 block w-full rounded-md border-2 border-gray-400 shadow-sm text-lg p-3 focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg"
-                  value="{{ old('location', $table->location) }}" placeholder="e.g., Near window">
+                  value="{{ old('position', $table->position) }}" placeholder="e.g., Near window">
           </div>
 
           <!-- Availability Status -->
@@ -46,7 +46,9 @@
           <!-- Submit Button -->
           <div class="mt-8">
               <button type="submit"
-                  class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-6 py-3 bg-indigo-600 text-lg font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-lg">
+                  class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm 
+                  px-6 py-3 bg-indigo-600 text-lg font-medium text-white hover:bg-indigo-700 focus:outline-none 
+                  focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-lg">
                   Update Table
               </button>
           </div>

@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class MenuController extends Controller
 {
-    //show all items
+    // Show all items
     public function index(Cafe $cafe)
     {
         // Retrieve all menus associated with the cafe
@@ -18,7 +18,7 @@ class MenuController extends Controller
         return view('menus.index', compact('cafe', 'menus'));
     }
 
-    //show single item
+    // Show single item
     public function show(Menu $menu)
     {
         return view('menus.show', [
@@ -26,7 +26,7 @@ class MenuController extends Controller
         ]);
     }
 
-    //show single item for owner
+    // Show single item for owner
     public function manage_single($cafe_id, $menu_id)
     {
         // Retrieve the cafe and menu item using the IDs
@@ -37,7 +37,7 @@ class MenuController extends Controller
         return view('menus.manage_single', compact('cafe', 'menu'));
     }
 
-    //show all items
+    // Show all items
     public function manage(Cafe $cafe)
     {
         // Retrieve all menus associated with the cafe
@@ -48,13 +48,13 @@ class MenuController extends Controller
     }
     
 
-    //show create form
+    // Show create form
     public function create(Cafe $cafe)
     {
         return view('menus.create', compact('cafe'));
     }
 
-    //edit menu
+    // Edit menu
     public function edit(Cafe $cafe, Menu $menu)
     {
         return view('menus.edit', [
@@ -63,7 +63,7 @@ class MenuController extends Controller
         ]);
     }
 
-    //store menu
+    // Store menu
     public function store(Request $request, $cafe_id)
     {
         $formfields = $request->validate([
@@ -83,10 +83,10 @@ class MenuController extends Controller
     
         Menu::create($formfields);
     
-        return redirect()->route('menus.manage', ['cafe' => $cafe_id])->with('message', 'Item successfully created');
+        return redirect()->route('menus.manage', ['cafe' => $cafe_id])->with('message', 'Item created successfully');
     }    
 
-    //update Item data
+    // Update Item data
     public function update(Request $request, Menu $menu)
     {
         $formfields = $request->validate([
@@ -103,11 +103,11 @@ class MenuController extends Controller
         $menu->update($formfields);
     
         // Assuming you need to redirect to the manage page for the cafe associated with the menu
-        return redirect()->route('menus.manage', ['cafe' => $menu->cafe_id])->with('message', 'Item updated successfully.');
+        return redirect()->route('menus.manage', ['cafe' => $menu->cafe_id])->with('message', 'Item updated successfully');
     }
     
 
-    //delete item
+    // Delete item
     public function destroy(Menu $menu)
     {
         $menu->delete();

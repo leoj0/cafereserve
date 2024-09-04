@@ -16,10 +16,11 @@ class TableController extends Controller
 
     public function store(Request $request, $cafe_id)
     {
+
         $formfields = $request->validate([
-            'table_number' => 'required|string|max:255',
+            'table_number' => 'required|string|max:255|unique:tables,table_number,NULL,id,cafe_id,' . $cafe_id,
             'seating_capacity' => 'required|integer|min:1',
-            'location' => 'nullable|string|max:255',
+            'position' => 'nullable|string|max:255',
             'availability_status' => 'required|string|in:Available,Reserved',
         ]);
     
@@ -27,7 +28,7 @@ class TableController extends Controller
     
         Table::create($formfields);
     
-        return redirect()->route('tables.manage', ['cafe' => $cafe_id])->with('message', 'Table successfully created');
+        return redirect()->route('tables.manage', ['cafe' => $cafe_id])->with('message', 'Table create successfully');
     }
 
     public function edit(Cafe $cafe, $table_id)
@@ -45,9 +46,9 @@ class TableController extends Controller
     {
         // Validate the form data
         $formfields = $request->validate([
-            'table_number' => 'required|string|max:255',
+            'table_number' => 'required|string|max:255|unique:tables,table_number,NULL,id,cafe_id,' . $cafe_id,
             'seating_capacity' => 'required|integer|min:1',
-            'location' => 'nullable|string|max:255',
+            'position' => 'nullable|string|max:255',
             'availability_status' => 'required|in:Available,Reserved'
         ]);
     
@@ -61,7 +62,7 @@ class TableController extends Controller
     
         // Redirect back with a success message
         return redirect()->route('tables.manage', ['cafe' => $cafe_id])
-                         ->with('message', 'Table successfully updated');
+                         ->with('message', 'Table updated successfully');
     }
     
 
@@ -69,7 +70,7 @@ class TableController extends Controller
     {
         $table->delete();
 
-        return redirect()->route('tables.manage', ['cafe' => $cafe_id])->with('message', 'Table successfully deleted');
+        return redirect()->route('tables.manage', ['cafe' => $cafe_id])->with('message', 'Table deleted successfully');
     }
     
     public function manage($cafe_id)

@@ -23,7 +23,6 @@ return new class extends Migration
             $table->text('special_request')->nullable();
             $table->enum('status', ['pending', 'confirmed', 'canceled'])->default('pending');
             $table->timestamps();
-            // $table->integer('version')->default(0);
             
             //Foreign Key
             $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');

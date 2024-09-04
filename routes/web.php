@@ -10,12 +10,39 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\LandingController;
+use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\ReservationController;
 
 
 
 // Landing Page
 Route::get('/', [LandingController::class, 'index'])->name('landing');
+
+// Feedback Routes
+Route::middleware('auth')->group(function () {
+
+    // Display all feedbacks for a specific cafe
+    Route::get('/cafes/{cafe}/feedbacks', [FeedbackController::class, 'index'])->name('feedbacks.index');
+    
+    // Display the form to create feedback for a specific cafe
+    Route::get('/feedback/create', [FeedbackController::class, 'create'])->name('feedback.create');
+
+    // Store the feedback in the database
+    Route::post('/feedback', [FeedbackController::class, 'store'])->name('feedback.store');
+
+    // 
+    Route::get('/user/feedbacks', [FeedbackController::class, 'userFeedbacks'])->name('feedback.user');
+
+    //
+    Route::get('/feedback/{feedback}/edit', [FeedbackController::class, 'edit'])->name('feedback.edit');
+
+    //
+    Route::delete('/feedback/{feedback}', [FeedbackController::class, 'destroy'])->name('feedback.destroy');
+
+    //
+    Route::put('/feedback/{feedback}', [FeedbackController::class, 'update'])->name('feedback.update');
+    
+});
 
 // Reservation Routes
 Route::middleware('auth')->group(function () {

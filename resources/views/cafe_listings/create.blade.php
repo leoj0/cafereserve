@@ -45,14 +45,6 @@
       </div>
 
       <div class="form-group">
-        <label for="website" class="block text-lg font-medium text-gray-700">Website</label>
-        <input type="url" class="form-control mt-2 block w-full rounded-md border-2 border-gray-400 shadow-sm text-lg p-3 focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg" id="website" name="website" value="{{ old('website') }}">
-        @error('website')
-        <div class="text-red-500 mt-1">{{ $message }}</div>
-        @enderror
-      </div>
-
-      <div class="form-group">
         <label for="logo" class="block text-lg font-medium text-gray-700">Cafe Logo</label>
         <input class="p-2 w-full" type="file" id="logo" name="logo">
         @error('logo')

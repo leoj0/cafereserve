@@ -9,31 +9,41 @@
             <input type="hidden" name="cafe_id" value="{{ $cafe->cafe_id }}">
 
             <!-- Table Number -->
-            <div class="mb-6">
+            <div>
                 <label for="table_number" class="block text-lg font-medium text-gray-700">Table Number</label>
                 <input type="text" name="table_number" id="table_number" required
                     class="mt-2 block w-full rounded-md border-2 border-gray-400 shadow-sm text-lg p-3 focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg"
                     value="{{ old('table_number') }}">
             </div>
+            @error('table_number')
+                <div class="text-red-500 mt-1">{{ $message }}</div>
+            @enderror
 
             <!-- Seating Capacity -->
-            <div class="mb-6">
+            <div class="mt-6">
                 <label for="seating_capacity" class="block text-lg font-medium text-gray-700">Seating Capacity</label>
                 <input type="number" name="seating_capacity" id="seating_capacity" required min="1"
                     class="mt-2 block w-full rounded-md border-2 border-gray-400 shadow-sm text-lg p-3 focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg"
                     value="{{ old('seating_capacity') }}">
             </div>
 
-            <!-- Location -->
-            <div class="mb-6">
-                <label for="location" class="block text-lg font-medium text-gray-700">Location</label>
-                <input type="text" name="location" id="location"
+            @error('seating_capacity')
+                <div class="text-red-500 mt-1">{{ $message }}</div>
+            @enderror
+
+            <!-- Position -->
+            <div class="mt-6">
+                <label for="position" class="block text-lg font-medium text-gray-700">Position</label>
+                <input type="text" name="position" id="position"
                     class="mt-2 block w-full rounded-md border-2 border-gray-400 shadow-sm text-lg p-3 focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg"
-                    value="{{ old('location') }}" placeholder="e.g., Near window">
+                    value="{{ old('position') }}" placeholder="e.g., Near window">
             </div>
+            @error('position')
+                <div class="text-red-500 mt-1">{{ $message }}</div>
+            @enderror
 
             <!-- Availability Status -->
-            <div class="mb-6">
+            <div class="mt-6">
                 <label for="availability_status" class="block text-lg font-medium text-gray-700">Status</label>
                 <select name="availability_status" id="availability_status" required
                     class="mt-2 block w-full rounded-md border-2 border-gray-400 shadow-sm text-lg p-3 focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg">
@@ -41,6 +51,9 @@
                     <option value="Reserved">Reserved</option>
                 </select>
             </div>
+            @error('availability_status')
+                <div class="text-red-500 mt-1">{{ $message }}</div>
+            @enderror
 
             <!-- Submit Button -->
             <div class="mt-8">
