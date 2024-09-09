@@ -25,6 +25,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'points',
         'user_tags',
     ];
 
@@ -65,6 +66,17 @@ class User extends Authenticatable
     public function feedbacks()
     {
         return $this->hasMany(Feedback::class, 'user_id');
+    }
+
+    public function claimedRewards()
+    {
+        return $this->hasMany(ClaimedReward::class, 'user_id');
+    }
+
+    public function addPoints($points)
+    {
+        $this->points += $points;
+        $this->save();
     }
     
 }

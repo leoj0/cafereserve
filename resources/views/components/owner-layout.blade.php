@@ -9,6 +9,7 @@ $cafeId = auth()->user()->cafe->cafe_id ?? null;
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="icon" type="image/x-icon" href="{{ asset('favicon.png') }}">
   <title>CafeReserve</title>
   <link rel="stylesheet" href="<?php echo asset('css/style.css')?>" type="text/css">
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -34,10 +35,12 @@ $cafeId = auth()->user()->cafe->cafe_id ?? null;
               aria-haspopup="true" aria-expanded="false">
               Cafe
             </a>
+  
             <div class="dropdown-menu" aria-labelledby="cafeDropdown">
               <a class="dropdown-item" href="{{route('cafes.manage', ['cafe' => $cafeId])}}">Cafe</a>
               <a class="dropdown-item" href="{{route('menus.manage', ['cafe' => $cafeId])}}">Menu</a>
               <a class="dropdown-item" href="{{route('tables.manage', ['cafe' => $cafeId])}}">Table</a>
+              <a class="dropdown-item"  href="{{route('rewards.manage', ['cafe' => $cafeId])}}">Rewards</a>
             </div>
             @else
             <div class="nav-item dropdown">

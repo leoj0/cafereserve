@@ -116,6 +116,10 @@
             @endif
         </div>
 
+        <!-- Rewards Partial -->
+        @include('partials._rewards', ['rewards' => $cafe->rewards])
+
+        <!-- Feedbacks Partial -->
         @include('partials._feedbacks', ['feedbacks' => $cafe->feedbacks])
     </x-horizontal-card>
 </x-layout>

@@ -35,4 +35,11 @@ class Feedback extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function awardLoyaltyPoints()
+    {
+        // Award 5 points for submitting feedback
+        $this->user->addPoints(5);
+    }
+
 }

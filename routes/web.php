@@ -9,14 +9,34 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\TableController;
+use App\Http\Controllers\RewardController;
 use App\Http\Controllers\LandingController;
+use App\Http\Controllers\LoyaltyController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\RewardClaimController;
 
 
 
 // Landing Page
 Route::get('/', [LandingController::class, 'index'])->name('landing');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/rewards', [RewardClaimController::class, 'index'])->name('rewards.index');
+    Route::post('/rewards/{reward}/claim', [RewardClaimController::class, 'claim'])->name('rewards.claim');
+    Route::get('/my-rewards', [RewardClaimController::class, 'userRewards'])->name('rewards.user');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/rewards/create', [RewardController::class, 'create'])->name('rewards.create');
+    Route::post('/rewards', [RewardController::class, 'store'])->name('rewards.store');
+    Route::get('/rewards/{reward}/edit', [RewardController::class, 'edit'])->name('rewards.edit');
+    Route::put('/rewards/{reward}', [RewardController::class, 'update'])->name('rewards.update');
+    Route::delete('/rewards/{reward}', [RewardController::class, 'destroy'])->name('rewards.destroy');
+    Route::get('/rewards/manage', [RewardController::class, 'manage'])->name('rewards.manage');
+});
+
+
 
 // Feedback Routes
 Route::middleware('auth')->group(function () {

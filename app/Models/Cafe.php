@@ -66,4 +66,9 @@ class Cafe extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function rewards()
+    {
+        return $this->hasMany(Reward::class, 'cafe_id');
+    }
+
 }

@@ -9,15 +9,14 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('menus', function (Blueprint $table) {
-            $table->id('menu_id');
+        Schema::create('rewards', function (Blueprint $table) {
+            $table->id('reward_id');
             $table->unsignedBigInteger('cafe_id');
-            $table->string('item_name');
-            $table->longText('item_description')->nullable();
-            $table->decimal('price', 8, 2);
-            $table->string('item_image')->nullable();
+            $table->string('reward_name');
+            $table->text('reward_description');
+            $table->integer('points_required');
             $table->timestamps();
 
             // Foreign key
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('menus');
+        Schema::dropIfExists('rewards');
     }
 };

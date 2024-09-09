@@ -38,4 +38,10 @@ class Reservation extends Model
         return $this->belongsTo(Table::class, 'table_id');
     }
 
+    public function awardLoyaltyPoints()
+    {
+        // Award 10 points for each reservation
+        $this->user->addPoints(10);
+    }
+
 }

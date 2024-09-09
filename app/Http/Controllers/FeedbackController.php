@@ -46,9 +46,10 @@ class FeedbackController extends Controller
         $formfields['user_id'] = auth()->id();
 
         // Create feedback record
-        Feedback::create($formfields);
+        $feedback = Feedback::create($formfields);
+        $feedback->awardLoyaltyPoints();
 
-        return redirect()->route('feedback.create')->with('message', 'Feedback submitted successfully!');
+        return redirect()->route('feedback.create')->with('message', 'Feedback submitted successfully and 5 points added');
     }
 
     public function userFeedbacks()

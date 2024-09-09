@@ -80,10 +80,11 @@ class ReservationController extends Controller
     
         // Attempt to create the reservation
         $reservation = Reservation::create($formFields);
+        $reservation->awardLoyaltyPoints();
     
         // Redirect with success message
         return redirect()->route('landing', ['cafe' => $cafe_id])
-                         ->with('message', 'Reservation created successfully');
+                         ->with('message', 'Reservation created successfully and 10 points awarded');
     }
     
 

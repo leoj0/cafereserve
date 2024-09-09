@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id('user_id');
             $table->string('role')->default('Customer');
             $table->string('name');
+            $table->integer('points')->default(0);
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

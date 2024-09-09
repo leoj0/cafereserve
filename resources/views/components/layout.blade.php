@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=`, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="{{ asset('favicon.png') }}">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>CafeReserve</title>
   <link rel="stylesheet" href="<?php echo asset('css/style.css')?>" type="text/css">
@@ -47,12 +48,14 @@
         <!-- Right-aligned elements -->
         <div class="d-flex ml-auto align-items-center">
           <a class="nav-link" href="{{ route('reservations.search') }}">Reserve Now</a>
+          <a class="nav-link" href="{{ route('rewards.index') }}">Rewards</a>
           <div class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false">
               User
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+              <a class="dropdown-item" href="{{ route('rewards.user') }}">My Rewards</a>
               <a class="dropdown-item" href="{{ route('reservations.user') }}">Reservations</a>
               <a class="dropdown-item" href="{{ route('feedback.user') }}">Feedback</a>
               <a class="dropdown-item" href="/show">Manage Account</a>
