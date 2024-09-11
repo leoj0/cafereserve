@@ -49,7 +49,7 @@ class FeedbackController extends Controller
         $feedback = Feedback::create($formfields);
         $feedback->awardLoyaltyPoints();
 
-        return redirect()->route('feedback.create')->with('message', 'Feedback submitted successfully and 5 points added');
+        return redirect()->route('landing')->with('message', 'Feedback submitted successfully and 5 points added');
     }
 
     public function userFeedbacks()

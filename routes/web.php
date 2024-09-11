@@ -7,11 +7,11 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CafeController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\RewardController;
 use App\Http\Controllers\LandingController;
-use App\Http\Controllers\LoyaltyController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RewardClaimController;
@@ -21,8 +21,20 @@ use App\Http\Controllers\RewardClaimController;
 // Landing Page
 Route::get('/', [LandingController::class, 'index'])->name('landing');
 
+Route::middleware('auth')->group(function () {
+    Route::get('/events', [EventController::class, 'index'])->name('events.index');
+    Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
+    Route::post('/events', [EventController::class, 'store'])->name('events.store');
+    Route::get('/events/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
+    Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
+    Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
+    Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
+    Route::get('/events/manage', [EventController::class, 'manage'])->name('events.manage');
+});
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/rewards', [RewardClaimController::class, 'index'])->name('rewards.index');
+    Route::get('/rewards/{reward}', [RewardClaimController::class, 'show'])->name('rewards.show');
     Route::post('/rewards/{reward}/claim', [RewardClaimController::class, 'claim'])->name('rewards.claim');
     Route::get('/my-rewards', [RewardClaimController::class, 'userRewards'])->name('rewards.user');
 });

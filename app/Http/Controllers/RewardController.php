@@ -21,6 +21,7 @@ class RewardController extends Controller
             'reward_name' => 'required|string|max:255',
             'reward_description' => 'required|string',
             'points_required' => 'required|integer|min:1',
+            'cafe_id' => 'required|exists:cafes,cafe_id',
         ]);
     
         $user = Auth::user();

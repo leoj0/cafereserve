@@ -78,5 +78,10 @@ class User extends Authenticatable
         $this->points += $points;
         $this->save();
     }
+
+    public function hasClaimedReward($rewardId)
+    {
+        return $this->claimedRewards()->where('reward_id', $rewardId)->exists();
+    }
     
 }

@@ -10,8 +10,25 @@ class RewardClaimController extends Controller
 {
     public function index()
     {
-        $rewards = Reward::all();
-        return view('rewards.index', compact('rewards'));
+        $user = auth()->user();
+        $rewards = Reward::with('cafe')->get();
+
+        $claimedRewardIds = ClaimedReward::where('user_id', $user->user_id)
+        ->pluck('reward_id')
+        ->toArray();
+
+        return view('rewards.index', compact('rewards', 'claimedRewardIds'));
+    }
+
+    public function show(Reward $reward)
+    {
+        $user = auth()->user();
+
+        $claimedRewardIds = ClaimedReward::where('user_id', $user->user_id)
+            ->pluck('reward_id')
+            ->toArray();
+    
+        return view('rewards.show', compact('reward', 'claimedRewardIds'));
     }
 
     public function claim(Request $request, Reward $reward)
@@ -27,6 +44,7 @@ class RewardClaimController extends Controller
         $claimedReward = ClaimedReward::create([
             'user_id' => $user->user_id,
             'reward_id' => $reward->reward_id,
+            'cafe_id' => $reward->cafe_id,
             'claimed_at' => now(),
         ]);
 

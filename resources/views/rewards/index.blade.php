@@ -1,30 +1,44 @@
 <x-layout>
-  <x-horizontal-card>
-      <h1 class="text-2xl font-bold mb-6">Rewards List</h1>
-
-      @if ($rewards->isEmpty())
-          <p class="text-gray-600">No rewards available</p>
-      @else
-          <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-              @foreach ($rewards as $reward)
-                  <div class="p-4 bg-white rounded-lg shadow">
-                      <div class="flex justify-between items-center">
-                          <h2 class="text-xl font-semibold text-gray-800">{{ $reward->reward_name }}</h2>
-                          <span class="text-sm font-medium text-gray-600">Points: {{ $reward->points_required }}</span>
+    <x-horizontal-card>
+      <div class="container mx-auto mt-8">
+          <h1 class="text-3xl font-bold text-gray-900 mb-6">Available Rewards</h1>
+  
+          @foreach ($rewards as $reward)
+              <!-- Wrapping the entire card in an anchor tag -->
+              <a href="{{ route('rewards.show', $reward->reward_id) }}" class="block bg-white shadow-md rounded-lg p-6 mb-4 hover:bg-gray-100 transition duration-300">
+                  <div class="flex justify-between items-center">
+                      <div>
+                          <h3 class="text-xl font-semibold text-gray-800">{{ $reward->reward_name }}</h3>
+                          <p class="text-gray-600">Required Points: {{ $reward->points_required }}</p>
+                          <p class="text-gray-500">Available at: {{ $reward->cafe->cafe_name }}</p> 
                       </div>
-                      <p class="text-gray-600 mt-2">{{ $reward->reward_description }}</p>
-
-                      <div class="mt-4 flex justify-between items-center">
-                          <!-- Add Claim Reward Button -->
-                          <form action="{{ route('rewards.claim', $reward->reward_id) }}" method="POST"
-                              class="inline-flex items-center px-6 py-3 bg-green-600 text-white text-lg font-semibold rounded-md shadow hover:bg-green-700">
-                              @csrf
-                              <button type="submit">Claim Reward</button>
-                          </form>
+                      
+                      <div class="flex space-x-2">
+                          <!-- Checking if the reward is claimed -->
+                          @if(in_array($reward->reward_id, $claimedRewardIds))
+                              <span class="bg-gray-500 text-white text-sm font-semibold px-4 py-2 rounded">Claimed</span>
+                          @else
+                              <!-- If not enough points, show disabled button -->
+                              @if(auth()->user()->points >= $reward->points_required)
+                                  <!-- Prevent form from triggering link navigation -->
+                                  <form action="{{ route('rewards.claim', $reward->reward_id) }}" method="POST">
+                                      @csrf
+                                      <button type="submit" 
+                                          class="inline-block bg-indigo-600 text-white text-sm font-medium px-4 py-2 rounded hover:bg-indigo-700">
+                                          Claim Reward
+                                      </button>
+                                  </form>
+                              @else
+                                  <button class="inline-block bg-gray-300 text-gray-700 text-sm font-medium px-4 py-2 rounded cursor-not-allowed" disabled>
+                                      Not Enough Points
+                                  </button>
+                              @endif
+                          @endif
                       </div>
                   </div>
-              @endforeach
-          </div>
-      @endif
-  </x-horizontal-card>
-</x-layout>
+              </a>
+          @endforeach
+      </div>
+    </x-horizontal-card>
+  </x-layout>
+  

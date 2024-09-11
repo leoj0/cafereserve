@@ -11,7 +11,7 @@ class ClaimedReward extends Model
 
     protected $primaryKey = 'claimed_reward_id';
 
-    protected $fillable = ['user_id', 'reward_id', 'claimed_at', 'used_at'];
+    protected $fillable = ['user_id', 'reward_id', 'cafe_id', 'claimed_at', 'used_at'];
 
     public function user()
     {
