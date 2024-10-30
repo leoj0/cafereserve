@@ -1,26 +1,43 @@
-<div class="cafe-card bg-light border p-4 rounded mb-3 flex items-center">
-    <div class="w-48 h-48 flex-shrink-0">
-        <img class="w-full h-full object-cover rounded"
-            src="{{ $cafe->logo ? asset('storage/' . $cafe->logo) : asset('storage/images/default_image.jpg') }}"
-            alt="Cafe Photo">
-    </div>
-
-    <div class="ml-6 flex flex-col">
-        <h3>
-            <a href="/cafe_listings/{{ $cafe->cafe_id }}" class="h4 mt-3">{{ $cafe->cafe_name }}</a>
-        </h3>
-        <div class="flex">
-            <x-cafe-tags :tagsCsv="$cafe->cafe_tags"></x-cafe-tags>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    @foreach($cafes as $cafe)
+    <div class="cafe-card bg-gray-800 border border-gray-700 rounded shadow-md h-[360px]">
+        <!-- Fixed height container for entire card -->
+        
+        <!-- Cafe Image - Fixed Height -->
+        <div class="h-48">
+            <img class="w-full h-full object-cover rounded-t"
+                src="{{ $cafe->logo ? asset('storage/' . $cafe->logo) : asset('storage/images/default_image.jpg') }}" 
+                alt="Cafe Photo">
         </div>
-        <div class="flex items-center mt-4">
-            <i class="fa-solid fa-location-dot mr-3"></i>
-            <p class="card-text">{{ $cafe->location }}</p>
-        </div>
-    </div>
 
-    <div class="absolute bottom-4 right-4 opacity-0 hover:opacity-100 transition-opacity duration-300">
-        <a href="{{ route('reservations.create', $cafe->cafe_id) }}"
-            class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Reserve</a>
+        <!-- Content Section - Fixed Position Layout -->
+        <div class="relative h-[192px] p-4"> <!-- 360px - 48px(image) = 192px for content -->
+            <!-- Cafe Name Area - Fixed Position -->
+            <div class="h-14">
+                <h3 class="line-clamp-2">
+                    <a href="/cafe_listings/{{ $cafe->cafe_id }}" 
+                       class="text-lg font-semibold text-white hover:text-blue-400">
+                       {{ $cafe->cafe_name }}
+                    </a>
+                </h3>
+            </div>
+
+            <!-- Tags - Absolute Position -->
+            <div class="absolute top-24 left-4 right-4">
+                <div class="h-10 overflow-hidden">
+                    <x-cafe-tags :tagsCsv="$cafe->cafe_tags" />
+                </div>
+            </div>
+
+            <!-- Location - Absolute Position -->
+            <div class="absolute bottom-4 left-4 right-4">
+                <div class="flex items-center text-gray-400">
+                    <i class="fa-solid fa-location-dot mr-2"></i>
+                    <p class="truncate">{{ $cafe->location }}</p>
+                </div>
+            </div>
+        </div>
+
     </div>
+    @endforeach
 </div>
-

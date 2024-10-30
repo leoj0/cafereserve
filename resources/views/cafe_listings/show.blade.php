@@ -1,66 +1,68 @@
 <x-layout>
-    <x-horizontal-card>
+    <x-horizontal-card class="bg-white">
         <div class="flex flex-col md:flex-row items-start gap-8">
-            <!-- Cafe Logo -->
-            <div class="w-full md:w-64 h-64 flex-shrink-0">
-                <img class="w-full h-full object-cover rounded-lg shadow-md"
+            <!-- Cafe Logo with subtle border and hover effect -->
+            <div class="w-full md:w-64 h-64 flex-shrink-0 group">
+                <img class="w-full h-full object-cover rounded-lg shadow-lg border border-gray-300 transition-transform duration-300 group-hover:scale-[1.02]"
                     src="{{ $cafe->logo ? asset('storage/'.$cafe->logo) : asset('storage/images/default_image.jpg') }}"
                     alt="{{ $cafe->cafe_name }}">
             </div>
 
-            <!-- Cafe Details -->
+            <!-- Cafe Details with darker text -->
             <div class="flex-grow">
                 <div class="flex justify-between items-start">
-                    <h1 class="text-4xl md:text-5xl font-light text-gray-800 mb-4">
+                    <h1 class="text-4xl md:text-5xl mb-4 text-gray-900 font-light tracking-tight">
                         {{ $cafe->cafe_name }}
                     </h1>
                 </div>
 
-                <div class="mb-4">
+                <div class="mb-6">
                     <x-owner-cafe-tags :tagsCsv="$cafe->cafe_tags"></x-owner-cafe-tags>
                 </div>
 
-                <p class="text-gray-600 mb-6 text-justify">
+                <p class="text-gray-700 mb-8 text-justify leading-relaxed">
                     {{ $cafe->description }}
                 </p>
 
-                <div class="space-y-2 text-gray-600">
-                    <div class="flex items-center">
-                        <i class="fa fa-phone w-5 text-gray-400"></i>
-                        <span>{{ $cafe->phone_number }}</span>
+                <!-- Contact Information with darker accents -->
+                <div class="space-y-4 text-gray-700">
+                    <div class="flex items-center p-4 bg-gray-100 rounded-lg hover:bg-gray-200 transition-all duration-300 border border-gray-200">
+                        <i class="fa fa-phone w-5 text-gray-600"></i>
+                        <span class="ml-3 font-medium">{{ $cafe->phone_number }}</span>
                     </div>
 
-                    <div class="flex items-center">
-                        <i class="fa fa-envelope w-5 text-gray-400"></i>
-                        <span>{{ $cafe->email }}</span>
+                    <div class="flex items-center p-4 bg-gray-100 rounded-lg hover:bg-gray-200 transition-all duration-300 border border-gray-200">
+                        <i class="fa fa-envelope w-5 text-gray-600"></i>
+                        <span class="ml-3 font-medium">{{ $cafe->email }}</span>
                     </div>
 
-                    <div class="flex items-center">
-                        <i class="fas fa-location-dot w-5 text-gray-400"></i>
-                        <span>{{ $cafe->location }}</span>
+                    <div class="flex items-center p-4 bg-gray-100 rounded-lg hover:bg-gray-200 transition-all duration-300 border border-gray-200">
+                        <i class="fas fa-location-dot w-5 text-gray-600"></i>
+                        <span class="ml-3 font-medium">{{ $cafe->location }}</span>
                     </div>
 
-                    <div class="flex items-center">
-                        <i class="fa fa-clock w-5 text-gray-400"></i>
-                        <span>Open: {{ $cafe->opening_time }} - {{ $cafe->closing_time }}</span>
+                    <div class="flex items-center p-4 bg-gray-100 rounded-lg hover:bg-gray-200 transition-all duration-300 border border-gray-200">
+                        <i class="fa fa-clock w-5 text-gray-600"></i>
+                        <span class="ml-3 font-medium">Open: {{ $cafe->opening_time }} - {{ $cafe->closing_time }}</span>
                     </div>
                 </div>
 
-                <!-- Make a Reservation Button -->
-                <div class="mt-6 flex gap-4">
+                <!-- Action Buttons with dark-themed styling -->
+                <div class="mt-8 flex flex-wrap gap-4">
                     <form action="{{ route('reservations.selectTablesPage', ['cafe' => $cafe->cafe_id]) }}" method="GET"
-                        class="inline-block">
+                        class="flex-grow sm:flex-grow-0">
                         <button type="submit"
-                            class="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition duration-300 ease-in-out">
+                            class="w-full sm:w-auto px-8 py-4 w-full bg-blue-600 text-white py-2 px-4 rounded-lg inline-flex items-center justify-center hover:bg-blue-700 transition-all duration-300 ease-in-out hover:translate-y-[-2px]">
+                            <i class="fas fa-calendar-plus mr-2"></i>
                             Make a Reservation
                         </button>
                     </form>
 
-                    <!-- Feedback Button -->
                     <form action="{{ route('feedback.create', ['cafe' => $cafe->cafe_id]) }}" method="GET"
-                        class="inline-block">
+                        class="flex-grow sm:flex-grow-0">
                         <button type="submit"
-                            class="px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition duration-300 ease-in-out">
+                            class="w-full sm:w-auto px-8 py-4 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-500 transition-all duration-300 ease-in-out flex items-center justify-center hover:translate-y-[-2px]">
+                            <i class="fas fa-comment mr-2"></i>
                             Give Feedback
                         </button>
                     </form>
@@ -68,58 +70,38 @@
             </div>
         </div>
 
-        <!-- Menus Section -->
-        <div class="mt-12 bg-gray-50 p-6 rounded-lg shadow-md">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-6 border-b border-gray-300 pb-2">Menus</h2>
-            @if($cafe->menus->isEmpty())
-            <div class="text-center">
-                <p class="text-gray-600">No menu items available.</p>
+        <!-- Section Divider -->
+        <div class="border-t border-gray-300 my-12"></div>
+
+        <!-- Content Sections with lighter hover effects -->
+        <div class="space-y-8">
+            <div class="bg-white rounded-lg p-8 hover:bg-gray-50 transition-all duration-300 border border-gray-300 shadow-sm">
+                <h2 class="text-2xl font-light text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-utensils mr-3 text-gray-700"></i>Menu
+                </h2>
+                @include('partials._menus', ['cafe' => $cafe])
             </div>
-            @else
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                @foreach($cafe->menus as $menu)
-                <a href="{{ route('menus.show', ['cafe' => $cafe->cafe_id, 'menu' => $menu->menu_id]) }}"
-                    class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition duration-300 ease-in-out hover:no-underline">
-                    <div class="aspect-w-16 aspect-h-9 overflow-hidden">
-                        <img class="w-full h-full object-cover transform group-hover:scale-105 transition duration-300 ease-in-out"
-                            src="{{ $menu->item_image ? asset('storage/' . $menu->item_image) : asset('storage/images/default_image.jpg') }}"
-                            alt="{{ $menu->item_name }}">
-                    </div>
-                    <div class="p-4">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ $menu->item_name }}</h3>
-                        <p class="text-lg font-medium text-blue-600">RM {{ number_format($menu->price, 2) }}</p>
-                    </div>
-                </a>
-                @endforeach
+
+            <div class="bg-white rounded-lg p-8 hover:bg-gray-50 transition-all duration-300 border border-gray-300 shadow-sm">
+                <h2 class="text-2xl font-light text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-chair mr-3 text-gray-700"></i>Available Tables
+                </h2>
+                @include('partials._tables', ['cafe' => $cafe])
             </div>
-            @endif
+
+            <div class="bg-white rounded-lg p-8 hover:bg-gray-50 transition-all duration-300 border border-gray-300 shadow-sm">
+                <h2 class="text-2xl font-light text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-gift mr-3 text-gray-700"></i>Rewards Program
+                </h2>
+                @include('partials._rewards', ['rewards' => $cafe->rewards])
+            </div>
+
+            <div class="bg-white rounded-lg p-8 hover:bg-gray-50 transition-all duration-300 border border-gray-300 shadow-sm">
+                <h2 class="text-2xl font-light text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-comments mr-3 text-gray-700"></i>Customer Feedback
+                </h2>
+                @include('partials._feedbacks', ['feedbacks' => $cafe->feedbacks])
+            </div>
         </div>
-
-        <!-- Tables Section -->
-        <div class="mt-12 bg-gray-50 p-6 rounded-lg shadow-md">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-6 border-b border-gray-300 pb-2">Tables</h2>
-            @if($cafe->tables->isEmpty())
-            <div class="text-center">
-                <p class="text-gray-600">No tables available.</p>
-            </div>
-            @else
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                @foreach($cafe->tables as $table)
-                <div class="bg-white rounded-xl shadow-sm p-4">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Table {{ $table->table_number }}</h3>
-                    <p class="text-lg text-gray-600">Seating Capacity: {{ $table->seating_capacity }}</p>
-                    <p class="text-sm text-gray-500">Position: {{ $table->position }}</p>
-                    </p>
-                </div>
-                @endforeach
-            </div>
-            @endif
-        </div>
-
-        <!-- Rewards Partial -->
-        @include('partials._rewards', ['rewards' => $cafe->rewards])
-
-        <!-- Feedbacks Partial -->
-        @include('partials._feedbacks', ['feedbacks' => $cafe->feedbacks])
     </x-horizontal-card>
 </x-layout>

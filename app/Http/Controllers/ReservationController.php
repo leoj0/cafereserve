@@ -22,15 +22,22 @@ class ReservationController extends Controller
     }
 
     // Show single reservation
-    public function show(Reservation $reservation)
+    public function show($reservation)
     {
+        // Fetch the reservation along with user and table details
+        $reservation = Reservation::with('user', 'table')->findOrFail($reservation);
+    
         return view('reservations.show', compact('reservation'));
     }
 
     // Show create form
     public function create(Request $request, Cafe $cafe)
     {
-
+        // Validate table_id from the request (if needed)
+        $request->validate([
+            'table_id' => 'required|exists:tables,table_id', // Ensure table_id is required and exists in tables
+        ]);
+    
         // Retrieve the table ID from the request
         $tableId = $request->input('table_id');
         $table = Table::find($tableId);
@@ -40,24 +47,18 @@ class ReservationController extends Controller
             return redirect()->back()->withErrors('Table not found');
         }
     
-        // Retrieve other attributes from the request
-        $reservationDate = $request->input('reservation_date');
-        $startTime = $request->input('start_time');
-        $endTime = $request->input('end_time');
-        $guestNumber = $request->input('guest_number');
-        $specialRequest = $request->input('special_request');
-    
         // Pass data to the view
         return view('reservations.create', [
             'cafe' => $cafe,
             'table' => $table,
-            'reservation_date' => $reservationDate,
-            'start_time' => $startTime,
-            'end_time' => $endTime,
-            'guest_number' => $guestNumber,
-            'special_request' => $specialRequest,
+            'reservation_date' => $request->input('reservation_date', ''),
+            'start_time' => $request->input('start_time', ''),
+            'end_time' => $request->input('end_time', ''),
+            'guest_number' => $request->input('guest_number', ''),
+            'special_request' => $request->input('special_request', ''),
         ]);
     }
+    
     
 
     // 
@@ -84,7 +85,7 @@ class ReservationController extends Controller
     
         // Redirect with success message
         return redirect()->route('landing', ['cafe' => $cafe_id])
-                         ->with('message', 'Reservation created successfully and 10 points awarded');
+                         ->with('message', 'Reservation created successfully');
     }
     
 
@@ -136,22 +137,13 @@ class ReservationController extends Controller
         return redirect()->route('reservations.user')->with('success', 'Reservation deleted successfully.');
     }
 
-    public function manage(Cafe $cafe)
-    {
-        // Retrieve all reservations associated with the cafe
-        $reservations = $cafe->reservations;
-
-        // Return the view with the cafe and reservation data
-        return view('reservations.manage', compact('cafe', 'reservations'));
-    }
-
     public function search(Request $request)
     {
         $filters = $request->only(['location', 'search']); // Adjust according to your input names
     
         $cafes = Cafe::latest()
                      ->filter($filters)
-                     ->paginate(5); // Adjust pagination as needed
+                     ->paginate(8); // Adjust pagination as needed
     
         return view('reservations.search', compact('cafes'));
     }
@@ -207,5 +199,39 @@ class ReservationController extends Controller
         } else {
             return redirect()->route('login');
         }
+    }
+
+
+    public function manage(Request $request, Cafe $cafe)
+    {
+        $statusFilter = $request->input('status');
+        
+        // Fetch reservations with optional status filtering and paginate
+        $reservations = Reservation::where('cafe_id', $cafe->cafe_id)
+            ->with('user', 'table')
+            ->when($statusFilter, function ($query, $status) {
+                return $query->where('status', $status);
+            })
+            ->orderBy('reservation_date', 'asc')
+            ->paginate(10); // You can change the number 10 to the desired items per page
+    
+        return view('reservations.manage', compact('cafe', 'reservations', 'statusFilter'));
+    }
+    
+    
+    public function updateStatus(Request $request, $reservation_id)
+    {
+        // Validate input
+        $request->validate([
+            'status' => 'required|in:confirmed,canceled',
+        ]);
+    
+        // Find the reservation and update the status
+        $reservation = Reservation::findOrFail($reservation_id);
+        $reservation->status = $request->status;
+        $reservation->save();
+    
+        return redirect()->route('reservations.manage', $reservation->cafe_id)
+                         ->with('message', 'Reservation status updated successfully.');
     }
 }

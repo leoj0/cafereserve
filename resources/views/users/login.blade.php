@@ -1,23 +1,33 @@
 <x-layout>
   <x-card>
-    <h2 class="title-form">Login</h2>
+    <h2 class="form-title">Login</h2>
     <form method="POST" action="/users/authenticate">
       @csrf
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}">
+      <div>
+        <input type="email" id="email" name="email" placeholder="Email" value="{{ old('email') }}" class="form-input">
         @error('email')
-        <div class="text-danger mt-1">{{ $message }}</div>
+        <div class="form-error">{{ $message }}</div>
         @enderror
       </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" class="form-control" id="password" name="password" value="{{ old('password') }}">
+      <div>
+        <input type="password" id="password" name="password" placeholder="Password" class="form-input">
         @error('password')
-        <div class="text-danger mt-1">{{ $message }}</div>
+        <div class="form-error">{{ $message }}</div>
         @enderror
       </div>
-      <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+      <div>
+        <button type="submit" class="form-button">
+          Sign In
+        </button>
+      </div>
     </form>
+    <div class="mt-12 text-center">
+      <p class="text-sm">
+        Don't have an account?
+        <a href="{{ route('register.form') }}" class="form-link">
+          Register now
+        </a>
+      </p>
+    </div>
   </x-card>
 </x-layout>

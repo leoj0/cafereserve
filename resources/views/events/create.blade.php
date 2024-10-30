@@ -1,28 +1,32 @@
-<x-layout>
-  <x-horizontal-card>
-      <div class="container mx-auto mt-8">
-          <h1 class="text-3xl font-bold mb-6">Create Event</h1>
+<x-owner-layout>
+  <x-card>
+      <h2 class="form-title">Create Event for {{ $cafe->cafe_name }}</h2>
 
-          <form action="{{ route('events.store') }}" method="POST">
-              @csrf
+      <form action="{{ route('events.store', $cafe->cafe_id) }}" method="POST">
+          @csrf
 
-              <div class="mb-4">
-                  <label for="title" class="block text-lg font-medium">Event Title</label>
-                  <input type="text" name="title" id="title" class="mt-2 block w-full border rounded p-2" required>
+              <div>
+                  <input type="text" name="event_name" id="event_name" placeholder="Event Name" value="{{ old('event_name') }}" class="form-input" required>
+                  @error('event_name')
+                  <div class="form-error">{{ $message }}</div>
+                  @enderror
               </div>
 
-              <div class="mb-4">
-                  <label for="description" class="block text-lg font-medium">Event Description</label>
-                  <textarea name="description" id="description" rows="4" class="mt-2 block w-full border rounded p-2" required></textarea>
+              <div>
+                  <textarea name="event_description" id="event_description" rows="4" placeholder="Event Description" class="form-input" required>{{ old('event_description') }}</textarea>
+                  @error('event_description')
+                  <div class="form-error">{{ $message }}</div>
+                  @enderror
               </div>
 
-              <div class="mb-4">
-                  <label for="event_date" class="block text-lg font-medium">Event Date</label>
-                  <input type="date" name="event_date" id="event_date" class="mt-2 block w-full border rounded p-2" required>
+              <div>
+                  <input type="date" name="event_date" id="event_date" value="{{ old('event_date') }}" class="form-input" required>
+                  @error('event_date')
+                  <div class="form-error">{{ $message }}</div>
+                  @enderror
               </div>
 
-              <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded">Create Event</button>
-          </form>
-      </div>
-  </x-horizontal-card>
-</x-layout>
+          <button type="submit" class="form-button">Create Event</button>
+      </form>
+  </x-card>
+</x-owner-layout>

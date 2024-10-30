@@ -2,24 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cafe;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {
+    // Show all events
     public function index()
     {
         $events = Event::with('cafe')->get();
         return view('events.index', compact('events'));
     }
 
-    public function create()
+    // Show form to create a new event for a specific cafe
+    public function create(Cafe $cafe)
     {
-        return view('events.create');
+        return view('events.create', compact('cafe'));
     }
 
-    public function store(Request $request)
+    // Store a new event in the database
+    public function store(Request $request, Cafe $cafe)
     {
         $request->validate([
             'event_name' => 'required|string|max:255',
@@ -28,22 +32,23 @@ class EventController extends Controller
         ]);
 
         $event = new Event();
-        $event->cafe_id = Auth::user()->cafe->cafe_id;
+        $event->cafe_id = $cafe->cafe_id; // Use cafe from model binding
         $event->event_name = $request->event_name;
         $event->event_description = $request->event_description;
         $event->event_date = $request->event_date;
         $event->save();
 
-        return redirect()->route('events.index')->with('success', 'Event created successfully.');
+        return redirect()->route('events.manage', $cafe->cafe_id)->with('success', 'Event created successfully.');
     }
 
-    public function edit($id)
+    // Show form to edit an existing event
+    public function edit(Cafe $cafe, Event $event)
     {
-        $event = Event::findOrFail($id);
-        return view('events.edit', compact('event'));
+        return view('events.edit', compact('cafe', 'event'));
     }
 
-    public function update(Request $request, $id)
+    // Update an existing event
+    public function update(Request $request, Cafe $cafe, Event $event)
     {
         $request->validate([
             'event_name' => 'required|string|max:255',
@@ -51,34 +56,33 @@ class EventController extends Controller
             'event_date' => 'required|date',
         ]);
 
-        $event = Event::findOrFail($id);
-        $event->event_name = $request->event_name;
-        $event->event_description = $request->event_description;
-        $event->event_date = $request->event_date;
-        $event->save();
+        $event->update([
+            'event_name' => $request->event_name,
+            'event_description' => $request->event_description,
+            'event_date' => $request->event_date,
+        ]);
 
-        return redirect()->route('events.index')->with('success', 'Event updated successfully.');
+        return redirect()->route('events.manage', $cafe->cafe_id)->with('success', 'Event updated successfully.');
     }
 
-    public function destroy($id)
+    // Delete an event
+    public function destroy(Cafe $cafe, Event $event)
     {
-        $event = Event::findOrFail($id);
         $event->delete();
 
-        return redirect()->route('events.index')->with('success', 'Event deleted successfully.');
+        return redirect()->route('events.manage', $cafe->cafe_id)->with('success', 'Event deleted successfully.');
     }
 
-    public function show($id)
+    // Show a specific event
+    public function show(Cafe $cafe, Event $event)
     {
-        $event = Event::findOrFail($id);
-        return view('events.show', compact('event'));
+        return view('events.show', compact('cafe', 'event'));
     }
 
-    public function manage()
+    // Manage events for a specific cafe
+    public function manage(Cafe $cafe)
     {
-        $user = Auth::user();
-        $events = Event::where('cafe_id', $user->cafe->cafe_id)->get();
-        
-        return view('events.manage', compact('events'));
+        $events = Event::where('cafe_id', $cafe->cafe_id)->get();
+        return view('events.manage', compact('cafe', 'events'));
     }
 }

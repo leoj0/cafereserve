@@ -1,82 +1,75 @@
 <x-owner-layout>
   <x-card>
+    <h2 class="form-title">Edit Cafe</h2>
 
-    <h2 class="title-form">Edit Cafe</h2>
-
-    <form method="POST" action="{{ route('cafes.update', $cafe->cafe_id) }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('cafes.update', ['cafe' => $cafe->cafe_id]) }}" enctype="multipart/form-data">
       @csrf
-      @method('PUT')
-      <div class="form-group">
-        <label for="cafe_name">Cafe Name</label>
-        <input type="text" class="form-control" id="cafe_name" name="cafe_name" value="{{ $cafe->cafe_name }}">
-        @error('cafe_name')
-        <div class="text-danger mt-1">{{ $message }}</div>
-        @enderror
-      </div>
-    
-      <div class="form-group">
-        <label for="phone_number">Phone Number</label>
-        <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ $cafe->phone_number }}">
-        @error('phone_number')
-        <div class="text-danger mt-1">{{ $message }}</div>
-        @enderror
-      </div>
-    
-      <div class="form-group">
-        <label for="cafe_tags">Cafe Tags (Comma Separated)</label>
-        <input type="text" class="form-control" id="cafe_tags" name="cafe_tags" value="{{ $cafe->cafe_tags }}">
-        @error('cafe_tags')
-        <div class="text-danger mt-1">{{ $message }}</div>
-        @enderror
-      </div>
-    
-      <div class="form-group">
-        <label for="location">Location</label>
-        <input type="text" class="form-control" id="location" name="location" value="{{ $cafe->location }}">
-        @error('location')
-        <div class="text-danger mt-1">{{ $message }}</div>
-        @enderror
-      </div>
-    
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" class="form-control" id="email" name="email" value="{{ $cafe->email }}">
-        @error('email')
-        <div class="text-danger mt-1">{{ $message }}</div>
-        @enderror
-      </div>
-    
-      <div class="form-group">
-        <label for="website">Website</label>
-        <input type="url" class="form-control" id="website" name="website" value="{{ $cafe->website}}">
-        @error('website')
-        <div class="text-danger mt-1">{{ $message }}</div>
-        @enderror
+      @method('PUT') <!-- This will generate a PUT request for updating -->
+
+      <div class="form-grid">
+        <div>
+          <input type="text" id="cafe_name" name="cafe_name" placeholder="Cafe Name" value="{{ old('cafe_name', $cafe->cafe_name) }}" class="form-input">
+          @error('cafe_name')
+          <div class="form-error">{{ $message }}</div>
+          @enderror
+        </div>
+
+        <div>
+          <input type="text" id="phone_number" name="phone_number" placeholder="Phone Number" value="{{ old('phone_number', $cafe->phone_number) }}" class="form-input">
+          @error('phone_number')
+          <div class="form-error">{{ $message }}</div>
+          @enderror
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="logo" >Cafe Logo</label>
-        <input class="p-2 w-full" type="file" id="logo" name="logo">
+      <input type="text" id="cafe_tags" name="cafe_tags" placeholder="Cafe Tags (Comma Separated)" value="{{ old('cafe_tags', $cafe->cafe_tags) }}" class="form-input">
+      @error('cafe_tags')
+      <div class="form-error">{{ $message }}</div>
+      @enderror
 
-        <img class="w-full h-full object-cover rounded"
-        src="{{$cafe->logo ? asset ('storage/'.$cafe->logo) : asset('storage/images/default_image.jpg')}}"
-        alt="Cafe Photo">
+      <input type="text" id="location" name="location" placeholder="Location" value="{{ old('location', $cafe->location) }}" class="form-input">
+      @error('location')
+      <div class="form-error">{{ $message }}</div>
+      @enderror
 
+      <input type="email" id="email" name="email" placeholder="Email" value="{{ old('email', $cafe->email) }}" class="form-input">
+      @error('email')
+      <div class="form-error">{{ $message }}</div>
+      @enderror
+
+      <div>
+        <label for="logo" class="block text-lg font-medium text-gray-700 mb-2">Cafe Logo</label>
+        <input type="file" id="logo" name="logo" class="form-input">
         @error('logo')
-        <div class="text-danger mt-1">{{ $message }}</div>
+        <div class="form-error">{{ $message }}</div>
         @enderror
+        @if ($cafe->logo)
+          <img src="{{ asset('storage/' . $cafe->logo) }}" alt="Current Logo" class="mt-2">
+        @endif
       </div>
-    
-      <div class="form-group">
-        <label for="description">Description</label>
-        <textarea class="form-control" id="description" name="description" rows="3">{{ $cafe->description }}</textarea>
-        @error('description')
-        <div class="text-danger mt-1">{{ $message }}</div>
-        @enderror
-      </div>
-    
-      <button type="submit" class="btn btn-primary btn-block">Submit</button>
-    </form>
 
+      <textarea id="description" name="description" rows="3" placeholder="Description" class="form-input">{{ old('description', $cafe->description) }}</textarea>
+      @error('description')
+      <div class="form-error">{{ $message }}</div>
+      @enderror
+
+      <div class="form-grid">
+        <div>
+          <input type="text" id="opening_time" name="opening_time" placeholder="Opening Time" value="{{ old('opening_time', $cafe->opening_time) }}" class="form-input">
+          @error('opening_time')
+          <div class="form-error">{{ $message }}</div>
+          @enderror
+        </div>
+
+        <div>
+          <input type="text" id="closing_time" name="closing_time" placeholder="Closing Time" value="{{ old('closing_time', $cafe->closing_time) }}" class="form-input">
+          @error('closing_time')
+          <div class="form-error">{{ $message }}</div>
+          @enderror
+        </div>
+      </div>
+
+      <button type="submit" class="form-button">Update</button>
+    </form>
   </x-card>
 </x-owner-layout>

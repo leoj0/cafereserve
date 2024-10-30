@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('table_number')->unique();
             $table->integer('seating_capacity');
             $table->string('position')->nullable();
-            $table->enum('availability_status', ['Available', 'Reserved'])->default('Available');
+            $table->boolean('is_bookable')->default(true);
             $table->timestamps();
 
             $table->foreign('cafe_id')->references('cafe_id')->on('cafes')->onDelete('cascade');

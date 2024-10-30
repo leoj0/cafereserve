@@ -111,6 +111,13 @@ class FeedbackController extends Controller
             ->with('message', 'Feedback deleted successfully.');
     }
 
+    public function ownerFeedbacks(Cafe $cafe)
+    {
+        // Retrieve the cafe with its feedback and associated users
+        $cafe = Cafe::with('feedbacks.user')->findOrFail($cafe->cafe_id);
+    
+        return view('feedbacks.owner-feedback', compact('cafe'));
+    }
 
 }
 

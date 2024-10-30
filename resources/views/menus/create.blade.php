@@ -1,6 +1,6 @@
 <x-owner-layout>
     <x-card>
-        <h2 class="title-form">Add Item</h2>
+        <h2 class="form-title">Add Item</h2>
 
         <form action="{{ route('menus.store', ['cafe' => $cafe->cafe_id]) }}" method="POST" enctype="multipart/form-data">
             @csrf
@@ -10,60 +10,45 @@
 
             <!-- Menu Item Name -->
             <div>
-                <label for="item_name" class="block text-lg font-medium text-gray-700">Item Name</label>
-                <input type="text" name="item_name" id="item_name" required
-                    class="mt-2 block w-full rounded-md border-2 border-gray-400 shadow-sm text-lg p-3 focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg"
-                    value="{{ old('item_name') }}">
+                <input type="text" name="item_name" id="item_name" placeholder="Item Name" value="{{ old('item_name') }}" class="form-input" required>
+                @error('item_name')
+                    <div class="form-error">{{ $message }}</div>
+                @enderror
             </div>
-            @error('item_name')
-                <div class="text-red-500 mt-1">{{ $message }}</div>
-            @enderror
 
             <!-- Menu Item Description -->
             <div class="mt-6">
-                <label for="item_description" class="block text-lg font-medium text-gray-700">Item Description</label>
-                <textarea name="item_description" id="item_description" rows="6"
-                    class="mt-2 block w-full rounded-md border-2 border-gray-400 shadow-sm text-lg p-3 focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg"
-                    placeholder="Describe the menu item">{{ old('item_description') }}</textarea>
+                <textarea name="item_description" id="item_description" rows="4" placeholder="Item Description" class="form-input" required>{{ old('item_description') }}</textarea>
+                @error('item_description')
+                    <div class="form-error">{{ $message }}</div>
+                @enderror
             </div>
-            @error('item_description')
-                <div class="text-red-500 mt-1">{{ $message }}</div>
-            @enderror
 
             <!-- Price -->
             <div class="mt-6">
-                <label for="price" class="block text-lg font-medium text-gray-700">Price</label>
-                <div class="relative mt-2">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500 text-lg">
-                        RM
-                    </span>
-                    <input type="text" name="price" id="price" required
-                        class="block w-full rounded-md border-2 border-gray-400 shadow-sm text-lg pl-12 pr-4 py-3 focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg"
-                        value="{{ old('price') }}">
+                <div class="relative">
+                    <span class="absolute left-3 top-1/4 transform -translate-y-1/2 font-semibold text-gray-600 text-lg">RM</span>
+                    <input type="text" name="price" id="price" placeholder="Price" value="{{ old('price') }}" class="form-input pl-12" required>
                 </div>
+                @error('price')
+                    <div class="form-error">{{ $message }}</div>
+                @enderror
             </div>
-            @error('price')
-                <div class="text-red-500 mt-1">{{ $message }}</div>
-            @enderror
 
             <!-- Item Image -->
             <div class="mt-6">
-                <label for "item_image" class="block text-lg font-medium text-gray-700">Item Image</label>
-                <input type="file" name="item_image" id="item_image"
-                    class="mt-2 block w-full text-lg text-gray-500 file:mr-4 file:py-3 file:px-4 file:text-lg file:font-semibold file:text-blue-700 hover:file:bg-blue-100">
+                <input type="file" name="item_image" id="item_image" class="form-input">
+                @error('item_image')
+                    <div class="form-error">{{ $message }}</div>
+                @enderror
             </div>
-            @error('item_image')
-                <div class="text-red-500 mt-1">{{ $message }}</div>
-            @enderror
 
             <!-- Submit Button -->
             <div class="mt-8">
-                <button type="submit"
-                    class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-6 py-3 bg-indigo-600 text-lg font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-lg">
+                <button type="submit" class="form-button">
                     Add Menu Item
                 </button>
             </div>
         </form>
-
     </x-card>
 </x-owner-layout>

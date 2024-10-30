@@ -47,5 +47,7 @@ class Table extends Model
         
         return $query;
     }
+
+    
     
 }

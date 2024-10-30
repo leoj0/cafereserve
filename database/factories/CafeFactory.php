@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Cafe;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -15,18 +16,23 @@ class CafeFactory extends Factory
      *
      * @return array<string, mixed>
      */
+
+    protected $model = Cafe::class;
+    
     public function definition(): array
     {
-        $user = User::first();
-        
         return [
-            'user_id' => $user->user_id,
-            'cafe_name' => $this->faker->company(),
+            'user_id' => User::factory(), // Generate a new user
+            'cafe_name' => $this->faker->company(), // Random company name
             'phone_number' => $this->faker->phoneNumber(),
-            'cafe_tags' => implode(', ', $this->faker->words(3)),
-            'email' => $this->faker->companyEmail(),
-            'location' => $this->faker->city(),
-            'description' => $this->faker->paragraph(5),
+            'cafe_tags' => implode(',', $this->faker->words(3)), // Random tags (comma-separated)
+            'location' => $this->faker->address(),
+            'email' => $this->faker->unique()->safeEmail(),
+            'description' => $this->faker->paragraph(),
+            'opening_time' => $this->faker->time('H:i'), // Random opening time
+            'closing_time' => $this->faker->time('H:i'), // Random closing time
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 }

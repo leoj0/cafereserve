@@ -20,6 +20,10 @@ class Reservation extends Model
         'special_request',
         'status',
     ];
+
+    protected $casts = [
+        'reservation_date' => 'date',
+    ];
     
     use HasFactory;
     

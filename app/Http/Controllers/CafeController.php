@@ -14,7 +14,7 @@ class CafeController extends Controller
     public function index()
     {
         return view('cafe_listings.index', [
-            'cafes' => Cafe::latest()->filter(request(['tag','search']))->Paginate(5)
+        'cafes' => Cafe::latest()->filter(request(['tag', 'search', 'location']))->paginate(8)
         ]);
     }
 
@@ -65,7 +65,7 @@ class CafeController extends Controller
         // Update the existing cafe record with the validated data
         $cafe->update($formfields);
     
-        return redirect('/cafe_listings/manage')->with('message', 'Cafe updated successfully');
+        return redirect()->route('owners.index')->with('message', 'Cafe updated successfully');
     }
     
     //delete cafe
@@ -93,8 +93,8 @@ class CafeController extends Controller
             'location' => 'required',
             'email' => 'required|email|max:255',
             'description' => 'required|string',
-            'opening_time' => 'required|string',
-            'closing_time' => 'required|string'
+            'opening_time' => 'required|date_format:H:i',  
+            'closing_time' => 'required|date_format:H:i'   
         ]);
 
         if($request->hasFile('logo'))
@@ -120,7 +120,7 @@ class CafeController extends Controller
         }
     
         // If the cafe is found and belongs to the user, return the view
-        return view('cafe_listings.manage', [
+        return view('/cafe_listings/manage', [
             'cafe' => $cafe
         ]);
     }

@@ -41,7 +41,7 @@ class RewardController extends Controller
             'cafe_id' => $cafe_id,
         ]);
     
-        return redirect()->route('rewards.manage')->with('success', 'Reward created successfully.');
+        return redirect()->route('rewards.manage', ['cafe' => $cafe_id])->with('message', 'Reward created successfully.');
     }
 
     public function edit($id)
@@ -52,7 +52,7 @@ class RewardController extends Controller
         // Ensure the reward belongs to the user's cafe
         $user = Auth::user();
         if ($reward->cafe_id !== $user->cafe->cafe_id) {
-            return redirect()->route('rewards.manage')->with('error', 'Unauthorized access to this reward.');
+            return redirect()->route('rewards.manage')->with('message', 'Unauthorized access to this reward.');
         }
     
         return view('rewards.edit', compact('reward'));
@@ -68,11 +68,15 @@ class RewardController extends Controller
     
         // Find the reward by ID
         $reward = Reward::findOrFail($id);
+        
     
         // Ensure the reward belongs to the user's cafe
         $user = Auth::user();
+        // Retrieve the logged-in user's associated cafe ID
+        $cafe_id = $user->cafe->cafe_id;
+
         if ($reward->cafe_id !== $user->cafe->cafe_id) {
-            return redirect()->route('rewards.manage')->with('error', 'Unauthorized access to this reward.');
+            return redirect()->route('rewards.manage', ['cafe' => $cafe_id])->with('message', 'Unauthorized access to this reward.');
         }
     
         // Update the reward
@@ -82,7 +86,7 @@ class RewardController extends Controller
             'points_required' => $request->points_required,
         ]);
     
-        return redirect()->route('rewards.manage')->with('success', 'Reward updated successfully.');
+        return redirect()->route('rewards.manage', ['cafe' => $cafe_id])->with('message', 'Reward updated successfully.');
     }
 
     public function destroy($id)
@@ -92,17 +96,20 @@ class RewardController extends Controller
     
         // Ensure the reward belongs to the user's cafe
         $user = Auth::user();
+        // Retrieve the logged-in user's associated cafe ID
+        $cafe_id = $user->cafe->cafe_id;
+
         if ($reward->cafe_id !== $user->cafe->cafe_id) {
-            return redirect()->route('rewards.manage')->with('error', 'Unauthorized access to this reward.');
+            return redirect()->route('rewards.manage')->with('message', 'Unauthorized access to this reward.');
         }
     
         // Delete the reward
         $reward->delete();
     
-        return redirect()->route('rewards.manage')->with('success', 'Reward deleted successfully.');
+        return redirect()->route('rewards.manage', ['cafe' => $cafe_id])->with('message', 'Reward deleted successfully.');
     }
 
-    public function manage()
+    public function manage(Cafe $cafe)
     {
         $user = Auth::user();
         if (!$user->cafe) {
@@ -113,7 +120,7 @@ class RewardController extends Controller
     
         $rewards = Reward::where('cafe_id', $cafe_id)->get();
     
-        return view('rewards.manage', compact('rewards'));
+        return view('rewards.manage', compact('rewards', 'cafe'));
     }
 
 

@@ -21,7 +21,6 @@ class TableController extends Controller
             'table_number' => 'required|string|max:255|unique:tables,table_number,NULL,id,cafe_id,' . $cafe_id,
             'seating_capacity' => 'required|integer|min:1',
             'position' => 'nullable|string|max:255',
-            'availability_status' => 'required|string|in:Available,Reserved',
         ]);
     
         $formfields['cafe_id'] = $cafe_id;
@@ -46,10 +45,9 @@ class TableController extends Controller
     {
         // Validate the form data
         $formfields = $request->validate([
-            'table_number' => 'required|string|max:255|unique:tables,table_number,NULL,id,cafe_id,' . $cafe_id,
+            'table_number' => 'required|string|max:255',
             'seating_capacity' => 'required|integer|min:1',
             'position' => 'nullable|string|max:255',
-            'availability_status' => 'required|in:Available,Reserved'
         ]);
     
         // Retrieve the table using the updated column name

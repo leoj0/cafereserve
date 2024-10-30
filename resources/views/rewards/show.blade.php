@@ -1,39 +1,46 @@
 <x-layout>
   <x-horizontal-card>
     <div class="container mx-auto mt-8">
-      <div class="bg-white shadow-md rounded-lg p-6 mb-4">
-        <h1 class="text-3xl font-bold text-gray-900 mb-4">{{ $reward->reward_name }}</h1>
+      <div class="bg-gray-800 shadow-md rounded-lg p-6 mb-4">
+        <!-- Reward Title -->
+        <h1 class="text-3xl font-bold text-white mb-4">{{ $reward->reward_name }}</h1>
 
-        <p class="text-gray-700 text-lg mb-4">{{ $reward->reward_description }}</p>
+        <!-- Reward Description -->
+        <p class="text-gray-300 text-lg mb-4">{{ $reward->reward_description }}</p>
 
+        <!-- Points Required -->
         <div class="mb-4">
-          <strong class="text-gray-800">Points Required:</strong> {{ $reward->points_required }}
+          <strong class="text-gray-200">Points Required:</strong> 
+          <span class="text-gray-300">{{ $reward->points_required }}</span>
         </div>
 
+        <!-- Available At -->
         <div class="mb-4">
-          <strong class="text-gray-800">Available at:</strong> {{ $reward->cafe->cafe_name }}
+          <strong class="text-gray-200">Available at:</strong> 
+          <span class="text-gray-300">{{ $reward->cafe->cafe_name }}</span>
         </div>
 
+        <!-- Reward Status -->
         @if(in_array($reward->reward_id, $claimedRewardIds))
-        <button class="inline-block bg-gray-400 text-white text-sm font-medium px-4 py-2 rounded cursor-not-allowed"
+        <button class="inline-block bg-gray-600 text-white text-sm font-medium px-4 py-2 rounded cursor-not-allowed" 
           disabled>
           Claimed
         </button>
         @else
-        @if(auth()->user()->points >= $reward->points_required)
-        <form action="{{ route('rewards.claim', $reward->reward_id) }}" method="POST">
-          @csrf
-          <button type="submit"
-            class="inline-block bg-indigo-600 text-white text-sm font-medium px-4 py-2 rounded hover:bg-indigo-700">
-            Claim Reward
+          @if(auth()->user()->points >= $reward->points_required)
+          <form action="{{ route('rewards.claim', $reward->reward_id) }}" method="POST">
+            @csrf
+            <button type="submit" 
+              class="inline-block bg-blue-500 text-white text-sm font-medium px-4 py-2 rounded hover:bg-blue-600">
+              Claim Reward
+            </button>
+          </form>
+          @else
+          <button class="inline-block bg-gray-500 text-white text-sm font-medium px-4 py-2 rounded cursor-not-allowed" 
+            disabled>
+            Not Enough Points
           </button>
-        </form>
-        @else
-        <button class="inline-block bg-gray-300 text-gray-700 text-sm font-medium px-4 py-2 rounded cursor-not-allowed"
-          disabled>
-          Not Enough Points
-        </button>
-        @endif
+          @endif
         @endif
       </div>
     </div>

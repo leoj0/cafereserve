@@ -21,33 +21,46 @@ use App\Http\Controllers\RewardClaimController;
 // Landing Page
 Route::get('/', [LandingController::class, 'index'])->name('landing');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth'])->group(function () {
+
+    // View all events
     Route::get('/events', [EventController::class, 'index'])->name('events.index');
-    Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
-    Route::post('/events', [EventController::class, 'store'])->name('events.store');
-    Route::get('/events/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
-    Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
-    Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
-    Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
-    Route::get('/events/manage', [EventController::class, 'manage'])->name('events.manage');
+
+    // View all events for the cafe
+    Route::get('/cafes/{cafe}/events/manage', [EventController::class, 'manage'])->name('events.manage');
+
+    // Create a new event
+    Route::get('/cafes/{cafe}/events/create', [EventController::class, 'create'])->name('events.create');
+    
+    Route::post('/cafes/{cafe}/events', [EventController::class, 'store'])->name('events.store');
+
+    // Edit an event
+    Route::get('/cafes/{cafe}/events/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
+    Route::put('/cafes/{cafe}/events/{event}', [EventController::class, 'update'])->name('events.update');
+
+    // Delete an event
+    Route::delete('/cafes/{cafe}/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
+
+    // Show an individual event
+    Route::get('/cafes/{cafe}/events/{event}', [EventController::class, 'show'])->name('events.show');
 });
 
-Route::middleware(['auth'])->group(function () {
+
+Route::middleware('auth')->group(function () {
     Route::get('/rewards', [RewardClaimController::class, 'index'])->name('rewards.index');
     Route::get('/rewards/{reward}', [RewardClaimController::class, 'show'])->name('rewards.show');
     Route::post('/rewards/{reward}/claim', [RewardClaimController::class, 'claim'])->name('rewards.claim');
     Route::get('/my-rewards', [RewardClaimController::class, 'userRewards'])->name('rewards.user');
 });
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/rewards/create', [RewardController::class, 'create'])->name('rewards.create');
+Route::middleware('auth')->group(function () {
+    Route::get('/cafes/{cafe}/rewards/create', [RewardController::class, 'create'])->name('rewards.create');
     Route::post('/rewards', [RewardController::class, 'store'])->name('rewards.store');
     Route::get('/rewards/{reward}/edit', [RewardController::class, 'edit'])->name('rewards.edit');
     Route::put('/rewards/{reward}', [RewardController::class, 'update'])->name('rewards.update');
     Route::delete('/rewards/{reward}', [RewardController::class, 'destroy'])->name('rewards.destroy');
-    Route::get('/rewards/manage', [RewardController::class, 'manage'])->name('rewards.manage');
+    Route::get('/cafes/{cafe}/rewards/manage', [RewardController::class, 'manage'])->name('rewards.manage');
 });
-
 
 
 // Feedback Routes
@@ -91,7 +104,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/cafes/{cafe}/manage_reservations', [ReservationController::class, 'manage'])->name('reservations.manage');
 
     // Show the form to create a new reservation
-    Route::post('/cafes/{cafe}/reservations/create', [ReservationController::class, 'create'])->name('reservations.create');
+    Route::get('/cafes/{cafe}/reservations/create', [ReservationController::class, 'create'])->name('reservations.create');
 
     // Store a new reservation
     Route::post('/cafes/{cafe}/reservations', [ReservationController::class, 'store'])->name('reservations.store');
@@ -110,6 +123,12 @@ Route::middleware('auth')->group(function () {
 
     // Reserve table page
     Route::get('/reservations/{cafe}/select-tables', [ReservationController::class, 'selectTablesPage'])->name('reservations.selectTablesPage');
+
+    // Manage reservation
+    Route::get('/cafes/{cafe}/reservations', [ReservationController::class, 'manage'])->name('reservations.manage');
+
+    //Update status
+    Route::put('/reservations/{reservation}/status', [ReservationController::class, 'updateStatus'])->name('reservations.updateStatus');
 
 
 });
@@ -223,6 +242,18 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'role:Owner'])->group(function () {
     // Owner Dashboard
     Route::get('/owners', [OwnerController::class, 'index'])->name('owners.index');
+
+    // Show Change Password Form
+    Route::get('/owner_change_password', [UserController::class, 'owner_showChangePasswordForm'])->name('owner.passwordForm');
+
+    // Show Owner Details
+    Route::get('/owner_show', [UserController::class, 'owner_show'])->name('owner.show');
+
+    // Show Feedback for Cafe
+    Route::get('/owner/cafe/{cafe}/feedbacks', [FeedbackController::class, 'ownerFeedbacks'])->name('owner.feedback');
+
+
+
 
 });
 

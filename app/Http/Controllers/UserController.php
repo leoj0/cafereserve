@@ -45,6 +45,12 @@ class UserController extends Controller
         return view('users.show', compact('user'));
     }
 
+    public function owner_show()
+    {
+        $user = Auth::user();
+        return view('users.owner_show', compact('user'));
+    }
+
     // Show Edit Form
     public function edit($id)
     {
@@ -89,6 +95,11 @@ class UserController extends Controller
     public function showChangePasswordForm()
     {
         return view('users.change_password');
+    }
+
+    public function owner_showChangePasswordForm()
+    {
+        return view('users.owner_change_password');
     }
 
     // Delete User
