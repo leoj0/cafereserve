@@ -30,6 +30,12 @@ class DatabaseSeeder extends Seeder
             'email' => 'owner@gmail.com',
         ]);
 
+        User::factory()->create([
+            'role' => 'Admin',
+            'name' => 'Jane Smith',
+            'email' => 'admin@gmail.com',
+        ]);
+
         Cafe::factory(6)->create();
     }
 }

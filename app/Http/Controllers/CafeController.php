@@ -6,10 +6,15 @@ use App\Models\Cafe;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+
 use Illuminate\Support\Facades\Storage;
 
 class CafeController extends Controller
 {
+
+    protected $recommendationService;
+
     //show all cafe
     public function index()
     {
@@ -104,9 +109,10 @@ class CafeController extends Controller
 
         $formfields['user_id'] = auth()->id();
         
-        Cafe::create($formfields);
+        $cafe = Cafe::create($formfields);
 
-        return redirect('/')->with('message', 'Cafe request successfully sent for approval');
+        return redirect()->route('cafe.uploadDocuments', $cafe->cafe_id)
+            ->with('success', 'Cafe details saved. Please upload the required documents.');
     }
 
     public function manage(Cafe $cafe)
@@ -125,5 +131,104 @@ class CafeController extends Controller
         ]);
     }
 
+    public function showDocumentUploadForm($cafe_id)
+    {
+        return view('/cafe_listings/upload-documents', ['cafe_id' => $cafe_id]);
+    }
+    
+    public function storeDocuments(Request $request, $cafe_id)
+    {
+        $request->validate([
+            'ssm_certificate' => 'required|file|mimes:pdf,jpg,png|max:2048',
+            'business_license' => 'required|file|mimes:pdf,jpg,png|max:2048',
+        ]);
+    
+        $cafe = Cafe::findOrFail($cafe_id);
+    
+        // Store documents
+        if ($request->hasFile('ssm_certificate')) {
+            $ssmPath = $request->file('ssm_certificate')->store('documents/ssm_certificates', 'public');
+            $cafe->ssm_certificate = $ssmPath;
+        }
+    
+        if ($request->hasFile('business_license')) {
+            $licensePath = $request->file('business_license')->store('documents/business_licenses', 'public');
+            $cafe->business_license = $licensePath;
+        }
+    
+        $cafe->save();
+    
+        return redirect()->route('cafes.showDocuments')->with('success', 'Documents uploaded successfully!');
+        
+    }
+
+    public function showDocuments(Request $request, $cafe_id)
+    {
+        $cafe = Cafe::findOrFail($cafe_id);
+        return view('/cafe_listings/show-document', compact('cafe'));
+        
+    }
+
+    public function updateDocuments(Request $request, $cafe_id)
+    {
+        $request->validate([
+            'ssm_certificate' => 'nullable|file|mimes:pdf,jpg,png|max:2048',
+            'business_license' => 'nullable|file|mimes:pdf,jpg,png|max:2048',
+        ]);
+
+        $cafe = Cafe::findOrFail($cafe_id);
+
+        // Update SSM Certificate if provided
+        if ($request->hasFile('ssm_certificate')) {
+            // Delete the old file if it exists
+            if ($cafe->ssm_certificate && Storage::disk('public')->exists($cafe->ssm_certificate)) {
+                Storage::disk('public')->delete($cafe->ssm_certificate);
+            }
+
+            // Store the new file
+            $ssmPath = $request->file('ssm_certificate')->store('documents/ssm_certificates', 'public');
+            $cafe->ssm_certificate = $ssmPath;
+        }
+
+        // Update Business License if provided
+        if ($request->hasFile('business_license')) {
+            // Delete the old file if it exists
+            if ($cafe->business_license && Storage::disk('public')->exists($cafe->business_license)) {
+                Storage::disk('public')->delete($cafe->business_license);
+            }
+
+            // Store the new file
+            $licensePath = $request->file('business_license')->store('documents/business_licenses', 'public');
+            $cafe->business_license = $licensePath;
+        }
+
+        $cafe->save();
+
+        return redirect()->route('cafes.showDocuments', ['cafe' => $cafe_id])->with('success', 'Documents updated successfully!');
+    }
+
+    public function editDocuments($cafe_id, $document)
+    {
+        // Retrieve the cafe by ID
+        $cafe = Cafe::findOrFail($cafe_id);
+    
+        // Validate the document type
+        if (!in_array($document, ['ssm_certificate', 'business_license'])) {
+            abort(404, 'Invalid document type.');
+        }
+    
+        // Pass the cafe and document type to the view
+        return view('/cafe_listings/edit-document', compact('cafe', 'document'));
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $cafe = Cafe::find($id);
+        $cafe->status = $request->status; // 'Approved' or 'Denied'
+        $cafe->save();
+
+        return redirect()->back()->with('message', 'Cafe status updated successfully!');
+    }
+    
 
 }

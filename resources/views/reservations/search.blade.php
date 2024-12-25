@@ -9,12 +9,12 @@
         <div class="mt-8">
           <form action="{{ route('reservations.search') }}" method="GET" class="max-w-4xl mx-auto">
             <div class="flex flex-col md:flex-row gap-4">
-              <!-- Cafe Name Input -->s
+              <!-- Cafe Name Input -->
               <div class="relative flex-1">
                 <input 
                   type="text" 
-                  name="cafe_name" 
-                  placeholder="Search cafe name..."
+                  name="search" 
+                  placeholder="Search cafe name or tags..."
                   class="w-full pl-12 pr-4 py-3 bg-gray-700 text-white placeholder-gray-400 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                 <i class="fas fa-coffee absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
@@ -87,7 +87,7 @@
                 </h3>
                 <div class="flex-shrink-0 flex items-center bg-gray-700 px-2 py-1 rounded">
                   <i class="fas fa-star text-yellow-400 mr-1"></i>
-                  <span class="text-white">4.5</span>
+                  <p class="text-white">{{ number_format($cafe->averageRating(), 1) }}</p>
                 </div>
               </div>
 

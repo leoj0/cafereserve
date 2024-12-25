@@ -24,7 +24,7 @@ $cafeId = auth()->user()->cafe->cafe_id ?? null;
     <nav class="navbar navbar-expand-lg navbar-dark bg-gray-800 ">
       <div class="container-fluid">
         <!-- Left-aligned brand name -->
-        <a class="navbar-brand" href="/">CafeReserve</a>
+        <a class="navbar-brand" href="{{ route('owners.index') }}">CafeReserve</a>
 
         <!-- Right-aligned elements -->
         <div class="d-flex ml-auto align-items-center">
@@ -49,6 +49,9 @@ $cafeId = auth()->user()->cafe->cafe_id ?? null;
               User
             </a>
             <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+              <li>
+                <a class="dropdown-item dropdown-hover" href="{{ route('cafes.showDocuments', ['cafe' => $cafeId]) }}">View Documents</a>
+              </li>
               <li>
                 <a class="dropdown-item dropdown-hover" href="{{ route('owner.show') }}">Manage Account</a>
               </li>

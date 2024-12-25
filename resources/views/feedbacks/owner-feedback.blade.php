@@ -1,6 +1,6 @@
 <x-owner-layout>
     <x-horizontal-card>
-        <h2 class="page_title">Manage Feedbacks</h2>
+        <h2 class="page_title">Feedbacks</h2>
   
         @if ($cafe->feedbacks->isEmpty())
             <p class="text-gray-400">No feedback has been submitted for this cafe yet.</p>

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('cafes', function (Blueprint $table) {
             $table->id('cafe_id');
+            $table->string('status')->default('Pending');
             $table->unsignedBigInteger('user_id');
             $table->string('cafe_name');
             $table->string('logo')->nullable();

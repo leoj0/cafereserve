@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CafeController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\TableController;
@@ -15,8 +16,9 @@ use App\Http\Controllers\LandingController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RewardClaimController;
+use App\Http\Controllers\RecommendationController;
 
-
+Route::get('/recommendations/{userId}', [RecommendationController::class, 'recommendCafes']);
 
 // Landing Page
 Route::get('/', [LandingController::class, 'index'])->name('landing');
@@ -31,7 +33,6 @@ Route::middleware(['auth'])->group(function () {
 
     // Create a new event
     Route::get('/cafes/{cafe}/events/create', [EventController::class, 'create'])->name('events.create');
-    
     Route::post('/cafes/{cafe}/events', [EventController::class, 'store'])->name('events.store');
 
     // Edit an event
@@ -175,7 +176,21 @@ Route::middleware('auth')->group(function () {
 
     // Show Single Cafe Listing
     Route::get('/cafe_listings/{cafe}', [CafeController::class, 'show'])->name('cafes.show');
-    
+
+    // Upload Form Page
+    Route::get('/cafe_listings/{cafe}/upload-documents', [CafeController::class, 'showDocumentUploadForm'])->name('cafes.uploadDocuments');
+
+    // Submit Document
+    Route::post('/cafe_listings/{cafe}/submit-documents', [CafeController::class, 'storeDocuments'])->name('cafes.submitDocuments');
+
+    // View Document
+    Route::get('/cafe_listings/{cafe}/documents', [CafeController::class, 'showDocuments'])->name('cafes.showDocuments');
+
+    //Update Documents
+    Route::post('/cafes/{cafe}/update-documents', [CafeController::class, 'updateDocuments'])->name('cafes.updateDocuments');
+
+    //Show Edit Page
+    Route::get('/cafes/{cafe_id}/edit-document/{document}', [CafeController::class, 'editDocuments'])->name('cafes.editDocuments');  
 });
 
 // Menu Routes
@@ -251,9 +266,11 @@ Route::middleware(['auth', 'role:Owner'])->group(function () {
 
     // Show Feedback for Cafe
     Route::get('/owner/cafe/{cafe}/feedbacks', [FeedbackController::class, 'ownerFeedbacks'])->name('owner.feedback');
+});
 
-
-
-
+// Admin Routes
+Route::middleware(['auth', 'role:Admin'])->group(function () {
+    Route::get('/admin/cafes', [AdminController::class, 'showPendingCafes'])->name('admin.dashboard');
+    Route::put('/admin/cafes/{id}/status', [AdminController::class, 'updateCafeStatus'])->name('admin.updateStatus');
 });
 

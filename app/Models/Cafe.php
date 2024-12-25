@@ -22,6 +22,8 @@ class Cafe extends Model
         'closing_time',
         'logo',
         'user_id',
+        'ssm_certificate', 
+        'business_license',
     ];
     
     public function scopeFilter($query, array $filters)
@@ -31,14 +33,14 @@ class Cafe extends Model
             $query->where('cafe_tags', 'like', '%' . $filters['tag'] . '%');
         }
     
-        // Filter by search terms (name, description, or tags) if provided
+        // Filter by search terms (name or tags) if provided
         if ($filters['search'] ?? false) {
-            $query->where(function ($q) use ($filters) {
-                $q->where('cafe_name', 'like', '%' . $filters['search'] . '%')
-                  ->orWhere('description', 'like', '%' . $filters['search'] . '%')
-                  ->orWhere('cafe_tags', 'like', '%' . $filters['search'] . '%');
-            });
-        }
+        $query->where(function ($q) use ($filters) 
+        {
+            $q->where('cafe_name', 'like', '%' . $filters['search'] . '%')
+                ->orWhere('cafe_tags', 'like', '%' . $filters['search'] . '%');
+        });
+}
     
         // Filter by location if provided
         if ($filters['location'] ?? false) {
@@ -76,4 +78,8 @@ class Cafe extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function averageRating()
+    {
+        return $this->feedbacks()->avg('rating');
+    }
 }

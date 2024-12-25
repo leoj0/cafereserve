@@ -22,4 +22,14 @@ class Reward extends Model
     {
         return $this->belongsTo(Cafe::class, 'cafe_id');
     }
+
+    public function claimedRewards()
+    {
+        return $this->hasMany(ClaimedReward::class, 'reward_id');
+    }
+
+    public function claimedCount()
+    {
+        return $this->claimedRewards()->count();
+    }
 }

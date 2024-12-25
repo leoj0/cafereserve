@@ -75,6 +75,23 @@ class ReservationController extends Controller
             'guest_number' => 'required|integer|min:1',
             'special_request' => 'nullable|string|max:500',
         ]);
+
+        // Check for overlapping reservations
+        $overlap = Reservation::where('cafe_id', $request->cafe_id)
+        ->where('reservation_date', $request->reservation_date)
+        ->where(function ($query) use ($request) {
+            $query->whereBetween('start_time', [$request->start_time, $request->end_time])
+              ->orWhereBetween('end_time', [$request->start_time, $request->end_time])
+              ->orWhere(function ($q) use ($request) {
+                  $q->where('start_time', '<=', $request->start_time)
+                    ->where('end_time', '>=', $request->end_time);
+              });
+        })
+    ->exists();
+
+    if ($overlap) {
+        return back()->with('error', 'This time slot is already reserved. Please choose another time.');
+    }
     
         // Add cafe_id to form fields if needed
         $formFields['cafe_id'] = $cafe_id;
@@ -204,18 +221,18 @@ class ReservationController extends Controller
 
     public function manage(Request $request, Cafe $cafe)
     {
-        $statusFilter = $request->input('status');
-        
-        // Fetch reservations with optional status filtering and paginate
+        $dateFilter = $request->input('reservation_date');
+    
+        // Fetch reservations with optional date filtering and paginate
         $reservations = Reservation::where('cafe_id', $cafe->cafe_id)
             ->with('user', 'table')
-            ->when($statusFilter, function ($query, $status) {
-                return $query->where('status', $status);
+            ->when($dateFilter, function ($query, $dateFilter) {
+                return $query->whereDate('reservation_date', $dateFilter);
             })
             ->orderBy('reservation_date', 'asc')
-            ->paginate(10); // You can change the number 10 to the desired items per page
+            ->paginate(10); // Adjust the number of items per page as needed
     
-        return view('reservations.manage', compact('cafe', 'reservations', 'statusFilter'));
+        return view('reservations.manage', compact('cafe', 'reservations', 'dateFilter'));
     }
     
     

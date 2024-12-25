@@ -20,7 +20,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $formFields = $request->validate([
-            'role' => ['required', Rule::in(['Owner', 'Customer'])],
+            'role' => ['required', Rule::in(['Admin', 'Owner', 'Customer'])],
             'name' => ['required', 'min:3'],
             'email' => ['required', 'email', Rule::unique('users', 'email')],
             'password' => 'required|confirmed|min:6',

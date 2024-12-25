@@ -61,8 +61,8 @@
                   </div>
               </div>
           @empty
-              <div class="col-span-full flex flex-col items-center justify-center p-12 bg-gray-900/80 backdrop-blur-sm rounded-lg border border-gray-800">
-                  <div class="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center mb-4">
+              <div class="col-span-full flex flex-col items-center justify-center p-12 bg-gray-900 backdrop-blur-sm rounded-lg border border-gray-800">
+                  <div class="w-16 h-16 bg-gray-700 rounded-full flex items-center justify-center mb-4">
                       <i class="fas fa-calendar-times text-2xl text-gray-400"></i>
                   </div>
                   <p class="text-gray-200 text-lg mb-2">No Past Reservations</p>
