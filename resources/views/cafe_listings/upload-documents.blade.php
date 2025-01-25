@@ -2,7 +2,7 @@
   <x-card>
     <h2 class="form-title">Upload Verification Documents</h2>
 
-    <form method="POST" action="{{ route('cafe.submitDocuments', $cafe_id) }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('cafes.submitDocuments', $cafe_id) }}" enctype="multipart/form-data">
       @csrf
 
       <div class="form-grid">

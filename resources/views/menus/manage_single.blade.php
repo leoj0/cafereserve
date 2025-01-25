@@ -3,7 +3,7 @@
     <div class="bg-white shadow rounded-lg overflow-hidden">
       <!-- Menu Image -->
       <img class="mx-auto block object-contain max-w-md"
-           src="{{ $menu->item_image ? asset('storage/' . $menu->item_image) : asset('storage/images/default_image.jpg') }}" 
+           src="{{ $menu->item_image ? asset('storage/' . $menu->item_image) : asset('storage/images/menu_default.jpg') }}" 
            alt="{{ $menu->item_name }}">
 
       <!-- Menu Details -->

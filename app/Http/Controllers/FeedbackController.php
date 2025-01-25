@@ -52,10 +52,21 @@ class FeedbackController extends Controller
         return redirect()->route('landing')->with('message', 'Feedback submitted successfully and 5 points added');
     }
 
-    public function userFeedbacks()
+    public function userFeedbacks(Request $request)
     {
         $user = auth()->user();
-        $feedbacks = $user->feedbacks; // Assuming the user model has a relationship to feedbacks
+    
+        // Get the cafe ID from the request, if provided
+        $cafeId = $request->input('cafe_id');
+    
+        // Fetch feedbacks for the user, optionally filtering by cafe ID
+        $query = Feedback::where('user_id', $user->user_id);
+    
+        if ($cafeId) {
+            $query->where('cafe_id', $cafeId); // Filter feedbacks by cafe_id if provided
+        }
+    
+        $feedbacks = $query->with('cafe')->get(); // Eager load the related cafe
     
         return view('feedbacks.user-feedback', compact('feedbacks'));
     }

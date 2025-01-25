@@ -10,7 +10,7 @@
       <a href="{{ route('menus.manage_single', ['cafe' => $cafe->cafe_id, 'menu' => $menu->menu_id]) }}"
         class="bg-white shadow rounded-lg overflow-hidden transition-transform transform hover:scale-105 hover:bg-gray-100 hover:no-underline">
         <img class=" w-full h-48 object-cover"
-          src="{{ $menu->item_image ? asset('storage/' . $menu->item_image) : asset('storage/images/default_image.jpg') }}"
+          src="{{ $menu->item_image ? asset('storage/' . $menu->item_image) : asset('storage/images/menu_default.jpg') }}"
           alt="{{ $menu->item_name }}">
         <div class="p-4">
           <h4 class="text-xl font-bold">{{ $menu->item_name }}</h4>

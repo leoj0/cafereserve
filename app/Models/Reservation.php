@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Reservation extends Model
 {
@@ -20,6 +21,18 @@ class Reservation extends Model
         'special_request',
         'status',
     ];
+
+    // Scope for past reservations
+    public function scopePast($query)
+    {
+        return $query->whereRaw("CONCAT(reservation_date, ' ', start_time) <= ?", [Carbon::now()->toDateTimeString()]);
+    }
+
+    // Scope for future reservations
+    public function scopeFuture($query)
+    {
+        return $query->whereRaw("CONCAT(reservation_date, ' ', start_time) > ?", [Carbon::now()->toDateTimeString()]);
+    }
 
     protected $casts = [
         'reservation_date' => 'date',
@@ -40,12 +53,6 @@ class Reservation extends Model
     public function table()
     {
         return $this->belongsTo(Table::class, 'table_id');
-    }
-
-    public function awardLoyaltyPoints()
-    {
-        // Award 10 points for each reservation
-        $this->user->addPoints(10);
     }
 
 }

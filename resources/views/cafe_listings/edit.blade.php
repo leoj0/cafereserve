@@ -4,7 +4,7 @@
 
     <form method="POST" action="{{ route('cafes.update', ['cafe' => $cafe->cafe_id]) }}" enctype="multipart/form-data">
       @csrf
-      @method('PUT') <!-- This will generate a PUT request for updating -->
+      @method('PUT')
 
       <div class="form-grid">
         <div>
@@ -41,7 +41,7 @@
         <label for="logo" class="block text-lg font-medium text-gray-700 mb-2">Cafe Logo</label>
         <input type="file" id="logo" name="logo" class="form-input">
         @error('logo')
-        <div class="form-error">{{ $message }}</div>
+          <div class="form-error">{{ $message }}</div>
         @enderror
         @if ($cafe->logo)
           <img src="{{ asset('storage/' . $cafe->logo) }}" alt="Current Logo" class="mt-2">

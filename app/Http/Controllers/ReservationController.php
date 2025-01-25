@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Cafe;
 use App\Models\Table;
 use App\Models\Reservation;
@@ -64,7 +65,14 @@ class ReservationController extends Controller
     // 
     public function store(Request $request, $cafe_id)
     {
-        // Validate request
+        // Fetch the table using the provided table_id
+        $table = Table::where('table_id', $request->input('table_id'))->first();
+    
+        if (!$table) {
+            return redirect()->back()->withErrors(['table_id' => 'Invalid table selected']);
+        }
+    
+        // Validate the request with dynamic seating capacity
         $formFields = $request->validate([
             'cafe_id' => 'required|exists:cafes,cafe_id',
             'table_id' => 'required|exists:tables,table_id',
@@ -72,33 +80,15 @@ class ReservationController extends Controller
             'reservation_date' => 'required|date|after:today',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
-            'guest_number' => 'required|integer|min:1',
+            'guest_number' => 'required|integer|min:1|max:' . $table->seating_capacity,
             'special_request' => 'nullable|string|max:500',
         ]);
-
-        // Check for overlapping reservations
-        $overlap = Reservation::where('cafe_id', $request->cafe_id)
-        ->where('reservation_date', $request->reservation_date)
-        ->where(function ($query) use ($request) {
-            $query->whereBetween('start_time', [$request->start_time, $request->end_time])
-              ->orWhereBetween('end_time', [$request->start_time, $request->end_time])
-              ->orWhere(function ($q) use ($request) {
-                  $q->where('start_time', '<=', $request->start_time)
-                    ->where('end_time', '>=', $request->end_time);
-              });
-        })
-    ->exists();
-
-    if ($overlap) {
-        return back()->with('error', 'This time slot is already reserved. Please choose another time.');
-    }
     
         // Add cafe_id to form fields if needed
         $formFields['cafe_id'] = $cafe_id;
     
         // Attempt to create the reservation
         $reservation = Reservation::create($formFields);
-        $reservation->awardLoyaltyPoints();
     
         // Redirect with success message
         return redirect()->route('landing', ['cafe' => $cafe_id])
@@ -106,53 +96,66 @@ class ReservationController extends Controller
     }
     
 
-    public function edit(Cafe $cafe, Reservation $reservation)
+    public function edit($id)
     {
-        // Check if the authenticated user is the owner of the reservation
-        if ($reservation->user_id !== auth()->id()) {
-            return redirect()->route('reservations.user')->with('error', 'You are not authorized to edit this reservation.');
+        // Fetch the reservation and related details
+        $reservation = Reservation::with(['cafe', 'table'])->findOrFail($id);
+    
+        // Check if the user has permission to edit this reservation
+        if (auth()->id() !== $reservation->user_id) {
+            return redirect()->route('reservations.index')->with('error', 'Unauthorized access.');
         }
     
-        // Pass the existing reservation data to the view
+        // Pass data to the view
         return view('reservations.edit', [
-            'cafe' => $cafe,
             'reservation' => $reservation,
-            'guest_number' => $reservation->guest_number,
-            'reservation_date' => $reservation->reservation_date,
-            'start_time' => $reservation->start_time,
-            'end_time' => $reservation->end_time,
-            'special_request' => $reservation->special_request,
+            'cafe' => $reservation->cafe,
             'table' => $reservation->table,
         ]);
     }
-
-    public function update(Request $request, Cafe $cafe, Reservation $reservation)
-    {
-        // Validate the input data
-        $validated = $request->validate([
-            'guest_number' => 'required|integer|min:1',
-            'special_request' => 'nullable|string|max:255',
-        ]);
     
-        // Ensure the user is authorized to update this reservation
-        if ($reservation->user_id !== auth()->id()) {
-            return redirect()->route('reservations.user')->with('error', 'You are not authorized to update this reservation.');
+    public function update(Request $request, $id)
+    {
+        $reservation = Reservation::findOrFail($id);
+    
+        // Retrieve the associated table
+        $table = Table::findOrFail($reservation->table_id);
+    
+        $rules = [
+            'guest_number' => 'required|integer|min:1|max:' . $table->seating_capacity,
+            'special_request' => 'nullable|string',
+        ];
+    
+        // Check if the reservation date was changed
+        if ($request->has('reservation_date') && $request->reservation_date !== $reservation->reservation_date) {
+            $rules['reservation_date'] = 'required|date';
         }
     
-        // Update the reservation details
-        $reservation->update($validated);
+        // Check if the start time was changed
+        if ($request->has('start_time') && $request->start_time !== $reservation->start_time) {
+            $rules['start_time'] = 'required|date_format:H:i';
+        }
     
-        // Redirect back to the user's reservations with a success message
-        return redirect()->route('reservations.user')->with('message', 'Reservation updated successfully.');
+        // Check if the end time was changed
+        if ($request->has('end_time') && $request->end_time !== $reservation->end_time) {
+            $rules['end_time'] = 'required|date_format:H:i';
+        }
+    
+        // Validate the request with dynamic rules
+        $request->validate($rules);
+    
+        // Update the reservation with the new data
+        $reservation->update([
+            'reservation_date' => $request->reservation_date ?? $reservation->reservation_date,
+            'start_time' => $request->start_time ?? $reservation->start_time,
+            'end_time' => $request->end_time ?? $reservation->end_time,
+            'guest_number' => $request->guest_number,
+            'special_request' => $request->special_request,
+        ]);
+    
+        return redirect()->route('reservations.user')->with('message', 'Reservation updated successfully');
     }
     
-    
-
-    public function destroy(Cafe $cafe, Reservation $reservation)
-    {
-        $reservation->delete();
-        return redirect()->route('reservations.user')->with('success', 'Reservation deleted successfully.');
-    }
 
     public function search(Request $request)
     {
@@ -208,15 +211,17 @@ class ReservationController extends Controller
         $user = auth()->user();
     
         if ($user) {
-            $reservations = $user->reservations()
-                                  ->with('cafe', 'table') // Ensure both relationships are eager-loaded
-                                  ->get();
+            // Get past and future reservations using model scopes
+            $pastReservations = $user->reservations()->past()->with('cafe', 'table')->get();
+            $futureReservations = $user->reservations()->future()->with('cafe', 'table')->get();
     
-            return view('reservations.user-reservations', compact('reservations'));
+            // Pass both collections to the view
+            return view('reservations.user-reservations', compact('pastReservations', 'futureReservations'));
         } else {
             return redirect()->route('login');
         }
     }
+    
 
 
     public function manage(Request $request, Cafe $cafe)
@@ -233,22 +238,29 @@ class ReservationController extends Controller
             ->paginate(10); // Adjust the number of items per page as needed
     
         return view('reservations.manage', compact('cafe', 'reservations', 'dateFilter'));
+
     }
-    
-    
-    public function updateStatus(Request $request, $reservation_id)
+
+    public function showReservations()
     {
-        // Validate input
-        $request->validate([
-            'status' => 'required|in:confirmed,canceled',
-        ]);
-    
-        // Find the reservation and update the status
-        $reservation = Reservation::findOrFail($reservation_id);
-        $reservation->status = $request->status;
-        $reservation->save();
-    
-        return redirect()->route('reservations.manage', $reservation->cafe_id)
-                         ->with('message', 'Reservation status updated successfully.');
+        $pastReservations = Reservation::past()->get();
+        $futureReservations = Reservation::future()->get();
+
+        return view('reservations.index', compact('pastReservations', 'futureReservations'));
     }
+
+    public function destroy($reservationId)
+    {
+        $reservation = Reservation::findOrFail($reservationId);
+        
+        // Optionally, check if the reservation is within a cancellable window
+        if ($reservation->reservation_date >= Carbon::now()) {
+            $reservation->delete();
+            return redirect()->route('reservations.user')->with('message', 'Reservation cancelled successfully');
+        }
+        
+        return back()->with('error', 'Cannot cancel past reservations');
+    }
+
+
 }

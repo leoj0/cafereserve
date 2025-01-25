@@ -17,11 +17,11 @@ class MenuFactory extends Factory
     public function definition(): array
     {
         return [
-            'cafe_id' => Cafe::factory(), // Generate a new cafe
+            'cafe_id' => Cafe::inRandomOrder()->value('cafe_id') ?? Cafe::factory(),
             'item_name' => $this->faker->words(2, true), // Random item name
-            'item_description' => $this->faker->optional()->paragraph(), // Optional description
             'price' => $this->faker->randomFloat(2, 5, 50), // Price between 5.00 and 50.00
-            'item_image' => $this->faker->optional()->imageUrl(200, 200, 'food', true, 'dish'), // Optional image URL
+            'item_description' => $this->faker->paragraph(), // Always generate a description
+            'item_image' => null,
             'created_at' => now(),
             'updated_at' => now(),
         ];

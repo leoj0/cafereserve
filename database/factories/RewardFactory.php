@@ -17,7 +17,7 @@ class RewardFactory extends Factory
     public function definition(): array
     {
         return [
-            'cafe_id' => Cafe::factory(), // Generate a new cafe
+            'cafe_id' => Cafe::inRandomOrder()->value('cafe_id') ?? Cafe::factory(),
             'reward_name' => $this->faker->words(3, true), // Random reward name
             'reward_description' => $this->faker->paragraph(), // Random description
             'points_required' => $this->faker->numberBetween(10, 500), // Points required between 10-500

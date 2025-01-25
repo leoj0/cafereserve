@@ -31,8 +31,14 @@ class CafeFactory extends Factory
             'description' => $this->faker->paragraph(),
             'opening_time' => $this->faker->time('H:i'), // Random opening time
             'closing_time' => $this->faker->time('H:i'), // Random closing time
+            'ssm_certificate' => $this->faker->unique()->lexify('SSM????????.pdf'), // Random SSM certificate name
+            'business_license' => $this->faker->unique()->lexify('BL????????.pdf'), // Random business license name
+            'admin_comment' => $this->faker->optional()->sentence(), // Random admin comment or null
+            'status' => $this->faker->randomElement(['Pending', 'Approved', 'Denied']), //Random Status
             'created_at' => now(),
             'updated_at' => now(),
         ];
+        
+    
     }
 }

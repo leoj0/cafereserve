@@ -15,11 +15,13 @@ class CafeController extends Controller
 
     protected $recommendationService;
 
-    //show all cafe
     public function index()
     {
         return view('cafe_listings.index', [
-        'cafes' => Cafe::latest()->filter(request(['tag', 'search', 'location']))->paginate(8)
+            'cafes' => Cafe::latest()
+                ->filter(request(['tag', 'search', 'location'])) // Apply filters for tag, search, and location
+                ->where('status', 'Approved') // Ensure only approved cafes are shown
+                ->paginate(8) // Paginate the results
         ]);
     }
 
@@ -111,7 +113,7 @@ class CafeController extends Controller
         
         $cafe = Cafe::create($formfields);
 
-        return redirect()->route('cafe.uploadDocuments', $cafe->cafe_id)
+        return redirect()->route('cafes.uploadDocuments', $cafe->cafe_id)
             ->with('success', 'Cafe details saved. Please upload the required documents.');
     }
 
@@ -158,7 +160,8 @@ class CafeController extends Controller
     
         $cafe->save();
     
-        return redirect()->route('cafes.showDocuments')->with('success', 'Documents uploaded successfully!');
+        return redirect()->route('cafes.showDocuments', ['cafe' => $cafe->cafe_id])->with('success', 'Documents uploaded successfully!');
+
         
     }
 

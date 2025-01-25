@@ -18,8 +18,8 @@ class FeedbackFactory extends Factory
     public function definition(): array
     {
         return [
-            'cafe_id' => Cafe::factory(), // Generate a new cafe
-            'user_id' => User::factory(), // Generate a new user
+            'cafe_id' => Cafe::inRandomOrder()->value('cafe_id') ?? Cafe::factory(),
+            'user_id' => User::inRandomOrder()->value('user_id') ?? User::factory(),
             'comments' => $this->faker->sentence(), // Random comment
             'rating' => $this->faker->numberBetween(1, 5), // Random rating from 1 to 5
             'created_at' => now(),

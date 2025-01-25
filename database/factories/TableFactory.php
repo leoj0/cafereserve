@@ -17,7 +17,7 @@ class TableFactory extends Factory
     public function definition(): array
     {
         return [
-            'cafe_id' => Cafe::factory(), // Generate a new cafe
+            'cafe_id' => Cafe::inRandomOrder()->first(), // Generate a new cafe
             'table_number' => $this->faker->unique()->numberBetween(1, 100), // Random unique table number
             'seating_capacity' => $this->faker->numberBetween(2, 10), // Random seating capacity
             'position' => $this->faker->randomElement(['Window', 'Center', 'Corner', 'Outdoor']), // Optional position

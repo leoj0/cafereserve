@@ -2,6 +2,7 @@
 
 use App\Models\Cafe;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CafeController;
@@ -17,8 +18,6 @@ use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RewardClaimController;
 use App\Http\Controllers\RecommendationController;
-
-Route::get('/recommendations/{userId}', [RecommendationController::class, 'recommendCafes']);
 
 // Landing Page
 Route::get('/', [LandingController::class, 'index'])->name('landing');
@@ -111,13 +110,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/cafes/{cafe}/reservations', [ReservationController::class, 'store'])->name('reservations.store');
 
     // Show the form to edit an existing reservation
-    Route::get('/cafes/{cafe}/reservations/{reservation}/edit', [ReservationController::class, 'edit'])->name('reservations.edit');
+    Route::get('/reservations/{id}/edit', [ReservationController::class, 'edit'])->name('reservations.edit');
 
     // Update an existing reservation
-    Route::put('/reservations/{reservation}', [ReservationController::class, 'update'])->name('reservations.update');
+    Route::put('/reservations/{id}', [ReservationController::class, 'update'])->name('reservations.update');
 
     // Delete a reservation
-    Route::delete('/reservations/{reservation}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
+    Route::delete('/reservations/{reservationId}/cancel', [ReservationController::class, 'destroy'])->name('reservations.cancel');
 
     // Search cafe
     Route::get('/search-cafe', [ReservationController::class, 'search'])->name('reservations.search');
@@ -270,7 +269,23 @@ Route::middleware(['auth', 'role:Owner'])->group(function () {
 
 // Admin Routes
 Route::middleware(['auth', 'role:Admin'])->group(function () {
-    Route::get('/admin/cafes', [AdminController::class, 'showPendingCafes'])->name('admin.dashboard');
+
+    Route::get('/admin/cafes', [AdminController::class, 'showPendingCafes'])->name('admin.index');
+
+    Route::put('/cafes/{cafe}', [AdminController::class, 'updateStatus'])->name('updateStatus');
+
     Route::put('/admin/cafes/{id}/status', [AdminController::class, 'updateCafeStatus'])->name('admin.updateStatus');
+
+    // Show Change Password Form
+    Route::get('/admin_change_password', [UserController::class, 'admin_showChangePasswordForm'])->name('admin.passwordForm');
+
+    // Show Admin Details
+    Route::get('/admin_show', [UserController::class, 'admin_show'])->name('admin.show');
 });
+
+Route::middleware('auth')->get('/recommendations', [RecommendationController::class, 'getRecommendations']);
+
+
+
+
 

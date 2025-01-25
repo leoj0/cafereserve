@@ -1,6 +1,6 @@
 <x-layout>
     <x-card>
-        <h2 class="title-form">Leave Feedback</h2>
+        <h2 class="form-title">Leave Feedback</h2>
 
         <form action="{{ route('feedback.store') }}" method="POST">
             @csrf
@@ -55,7 +55,7 @@
             <!-- Submit Button -->
             <div class="mt-8">
                 <button type="submit"
-                    class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-6 py-3 bg-indigo-600 text-lg font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-lg">
+                    class="form-button">
                     Submit Feedback
                 </button>
             </div>

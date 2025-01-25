@@ -68,7 +68,7 @@
             </div>
         </div>
 
-        <!-- Quick Actions Grid -->
+        {{-- <!-- Quick Actions Grid -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <!-- Manage Reservations -->
             <a href="{{ route('reservations.manage' , $cafe->cafe_id) }}"
@@ -123,7 +123,7 @@
                     <i class="fas fa-arrow-right ml-2"></i>
                 </div>
             </a>
-        </div>
+        </div> --}}
 
         <!-- Features Grid -->
         <div id="features" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

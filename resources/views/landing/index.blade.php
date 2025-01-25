@@ -1,5 +1,8 @@
 @auth
-@if(auth()->user()->role === 'Owner')
+@if(auth()->user()->role === 'Admin')
+    @include('admins.index', ['cafes' => $pendingCafes])
+  
+@elseif(auth()->user()->role === 'Owner')
 <x-owner-layout>
     <!-- Welcome Section -->
     <div class="bg-gray-800 p-6 mb-8">
@@ -37,34 +40,10 @@
     </section>
 
     <!-- Featured Cafes Section -->
-    <section class="py-20 bg-gray-900">
-        <div class="container mx-auto px-4">
-            <h2 class="text-4xl font-bold text-center mb-4 text-white">Recommended for You</h2>
-            <p class="text-gray-400 text-center mb-12">Discover our handpicked selection of fantastic cafes</p>
-    
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                @foreach ($cafes as $cafe)
-                    <div class="group relative overflow-hidden rounded-2xl bg-gray-800 transition-all duration-300 hover:shadow-2xl hover:shadow-emerald-500/10">
-                        <div class="aspect-w-1 aspect-h-1">
-                            <img src="{{ $cafe->logo ? asset('storage/'.$cafe->logo) : asset('storage/images/default_image.jpg') }}"
-                                 alt="{{ $cafe->cafe_name }}"
-                                 class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
-                        </div>
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent">
-                            <div class="absolute bottom-0 p-6 text-white">
-                                <h3 class="text-2xl font-bold mb-2">{{ $cafe->cafe_name }}</h3>
-                                <p class="text-emerald-400 flex items-center">
-                                    <i class="fas fa-map-marker-alt mr-2"></i>
-                                    {{ $cafe->location }}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
-    
+        {{-- Include recommendations --}}
+        @include('recommendations.recommendations', ['recommendations' => $recommendationsWithDetails])
+
+
 
     <!-- How It Works Section -->
     <section class="py-20 bg-gray-800">
@@ -108,10 +87,6 @@
                 @foreach ($feedbacks as $feedback)
                 <div class="bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-700">
                     <div class="flex items-center mb-6">
-                        <div class="h-14 w-14 rounded-full overflow-hidden mr-4">
-                            <img src="{{ $feedback->user->avatar ?? '/default-avatar.png' }}"
-                                alt="{{ $feedback->user->name }}'s avatar" class="h-full w-full object-cover">
-                        </div>
                         <div>
                             <h4 class="text-xl font-bold text-white">{{ $feedback->user->name }}</h4>
                             <p class="text-emerald-400">{{ $feedback->created_at->format('F d, Y') }}</p>
@@ -155,36 +130,6 @@
         </div>
     </section>
 
-    <!-- Featured Cafes Section -->
-    <section class="py-20 bg-gray-900">
-        <div class="container mx-auto px-4">
-            <h2 class="text-4xl font-bold text-center mb-4 text-white">Recommended for You</h2>
-            <p class="text-gray-400 text-center mb-12">Discover our handpicked selection of fantastic cafes</p>
-    
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                @foreach ($cafes as $cafe)
-                    <div class="group relative overflow-hidden rounded-2xl bg-gray-800 transition-all duration-300 hover:shadow-2xl hover:shadow-emerald-500/10">
-                        <div class="aspect-w-1 aspect-h-1">
-                            <img src="{{ $cafe->logo ? asset('storage/'.$cafe->logo) : asset('storage/images/default_image.jpg') }}"
-                                 alt="{{ $cafe->cafe_name }}"
-                                 class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
-                        </div>
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent">
-                            <div class="absolute bottom-0 p-6 text-white">
-                                <h3 class="text-2xl font-bold mb-2">{{ $cafe->cafe_name }}</h3>
-                                <p class="text-emerald-400 flex items-center">
-                                    <i class="fas fa-map-marker-alt mr-2"></i>
-                                    {{ $cafe->location }}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
-    
-
     <!-- How It Works Section -->
     <section class="py-20 bg-gray-800">
         <div class="container mx-auto px-4">
@@ -227,10 +172,6 @@
                 @foreach ($feedbacks as $feedback)
                 <div class="bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-700">
                     <div class="flex items-center mb-6">
-                        <div class="h-14 w-14 rounded-full overflow-hidden mr-4">
-                            <img src="{{ $feedback->user->avatar ?? '/default-avatar.png' }}"
-                                alt="{{ $feedback->user->name }}'s avatar" class="h-full w-full object-cover">
-                        </div>
                         <div>
                             <h4 class="text-xl font-bold text-white">{{ $feedback->user->name }}</h4>
                             <p class="text-emerald-400">{{ $feedback->created_at->format('F d, Y') }}</p>

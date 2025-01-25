@@ -16,7 +16,7 @@
             class="group bg-gray-700 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300 ease-in-out hover:no-underline">
             <div class="aspect-w-16 aspect-h-9 overflow-hidden">
               <img class="w-full h-full object-cover transform group-hover:scale-105 transition duration-300 ease-in-out"
-                src="{{ $menu->item_image ? asset('storage/' . $menu->item_image) : asset('storage/images/default_image.jpg') }}"
+                src="{{ $menu->item_image ? asset('storage/' . $menu->item_image) : asset('storage/images/menu_default.jpg') }}"
                 alt="{{ $menu->item_name }}">
             </div>
             <div class="p-4">

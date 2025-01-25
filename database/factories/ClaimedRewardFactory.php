@@ -19,7 +19,7 @@ class ClaimedRewardFactory extends Factory
     public function definition(): array
     {
         $claimedAt = $this->faker->dateTimeBetween('-1 month', 'now'); // Random claim date within the last month
-        $usedAt = $this->faker->optional(0.5)->dateTimeBetween($claimedAt, 'now'); // 50% chance it was used
+        $usedAt = $this->faker->dateTimeBetween($claimedAt, 'now'); // 50% chance it was used
 
         return [
             'user_id' => User::factory(), // Generate a new user

@@ -8,7 +8,7 @@
       <div class="form-grid">
         <!-- SSM Certificate -->
         <div>
-          <label for="ssm_certificate" class="block text-lg font-medium mb-2 text-gray-800 dark:text-gray-200">Update SSM Certificate (PDF/JPG/PNG)</label>
+          <label for="ssm_certificate" class="block text-lg font-medium mb-2">Update SSM Certificate (PDF/JPG/PNG)</label>
           <input type="file" name="ssm_certificate" id="ssm_certificate" class="form-input">
           @if ($cafe->ssm_certificate)
             <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
@@ -22,7 +22,7 @@
 
         <!-- Business License -->
         <div>
-          <label for="business_license" class="block text-lg font-medium mb-2 text-gray-800 dark:text-gray-200">Update Business License (PDF/JPG/PNG)</label>
+          <label for="business_license" class="block text-lg font-medium mb-2">Update Business License (PDF/JPG/PNG)</label>
           <input type="file" name="business_license" id="business_license" class="form-input">
           @if ($cafe->business_license)
             <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">

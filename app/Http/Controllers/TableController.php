@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cafe;
 use App\Models\Table;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class TableController extends Controller
 {
@@ -14,21 +15,34 @@ class TableController extends Controller
         return view('tables.create', compact('cafe'));
     }
 
+
     public function store(Request $request, $cafe_id)
     {
-
         $formfields = $request->validate([
-            'table_number' => 'required|string|max:255|unique:tables,table_number,NULL,id,cafe_id,' . $cafe_id,
+            'table_number' => 'required|string|max:255',
             'seating_capacity' => 'required|integer|min:1',
             'position' => 'nullable|string|max:255',
         ]);
+    
+        // Check if the table_number already exists for the cafe_id
+        $existingTable = Table::where('cafe_id', $cafe_id)
+            ->where('table_number', $formfields['table_number'])
+            ->first();
+    
+        if ($existingTable) {
+            // Throw a validation exception if the table_number already exists
+            throw ValidationException::withMessages([
+                'table_number' => 'The table number already exists for this cafe.',
+            ]);
+        }
     
         $formfields['cafe_id'] = $cafe_id;
     
         Table::create($formfields);
     
-        return redirect()->route('tables.manage', ['cafe' => $cafe_id])->with('message', 'Table create successfully');
+        return redirect()->route('tables.manage', ['cafe' => $cafe_id])->with('message', 'Table created successfully.');
     }
+    
 
     public function edit(Cafe $cafe, $table_id)
     {

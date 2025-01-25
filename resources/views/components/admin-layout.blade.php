@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-@php
-$cafeId = auth()->user()->cafe->cafe_id ?? null;
-@endphp
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,31 +15,12 @@ $cafeId = auth()->user()->cafe->cafe_id ?? null;
 
 <body>
   <header>
-    <x-flash-message />
+    <x-flash-message/>
     @auth
     <nav class="navbar navbar-expand-lg navbar-dark bg-gray-800 ">
       <div class="container-fluid">
         <!-- Left-aligned brand name -->
-        <a class="navbar-brand" href="{{ route('owners.index') }}">CafeReserve</a>
-
-        <!-- Right-aligned elements -->
-        <div class="d-flex ml-auto align-items-center">
-          <!-- Notification or alert if cafe does not exist -->
-          @if($cafeId)
-            <a class="nav-link text-white" href="{{route('reservations.manage', ['cafe' => $cafeId])}}">Reservation</a>
-            <a class="nav-link text-white" href="{{route('cafes.manage', ['cafe' => $cafeId])}}">Cafe</a>
-            <a class="nav-link text-white" href="{{route('menus.manage', ['cafe' => $cafeId])}}">Menu</a>
-            <a class="nav-link text-white" href="{{route('tables.manage', ['cafe' => $cafeId])}}">Table</a>
-            <a class="nav-link text-white" href="{{route('rewards.manage', ['cafe' => $cafeId])}}">Reward</a>
-            <a class="nav-link text-white" href="{{route('owner.feedback', ['cafe' => $cafeId])}}">Feedback</a>
-            <a class="nav-link text-white" href="{{route('events.manage', ['cafe' => $cafeId])}}">Event</a>
-            <a class="nav-link text-white" href="{{ route('cafes.showDocuments', ['cafe' => $cafeId]) }}">Update Documents</a>
-          @else
-          <div class="nav-item">
-            <a class="nav-link text-white" href="{{route('cafes.create')}}">Create Cafe</a>
-          </div>
-          @endif
-
+        <a class="navbar-brand" href="{{ route('admin.index') }}">CafeReserve</a>
           <!-- User Dropdown -->
           <div class="nav-item dropdown ms-3">
             <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -51,10 +28,10 @@ $cafeId = auth()->user()->cafe->cafe_id ?? null;
             </a>
             <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
               <li>
-                <a class="dropdown-item dropdown-hover" href="{{ route('owner.show') }}">Manage Account</a>
+                <a class="dropdown-item dropdown-hover" href="{{ route('admin.show') }}">Manage Account</a>
               </li>
               <li>
-                <a class="dropdown-item dropdown-hover" href="{{ route('owner.passwordForm') }}">Change Password</a>
+                <a class="dropdown-item dropdown-hover" href="{{ route('admin.passwordForm') }}">Change Password</a>
               </li>
               <li>
                 <div class="dropdown-divider"></div>
