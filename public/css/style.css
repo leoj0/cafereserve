@@ -1,0 +1,219 @@
+body {
+  min-height: 155vh;
+  margin: 0;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+header {
+  min-height: 50px;
+  background: lightcyan;
+}
+
+footer {
+  min-height: 50px;
+  background: PapayaWhip;
+}
+
+main {
+  flex: 1;
+
+}
+
+#flash-message {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(40, 167, 69, 0.8);
+  color: white;
+  padding: 15px;
+  border-radius: 5px;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
+}
+
+.nav-item.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.form-container {
+  background-color: white;
+  padding: 4rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  width: 100%;
+  margin: 2rem auto;
+}
+
+.form-input, .form-select  {
+  border: none;
+  border-bottom: 2px solid #000;
+  padding: 0.5rem 0;
+  width: 100%;
+  font-size: 1rem;
+  margin-bottom: 2rem;
+  transition: border-color 0.3s ease;
+  background-color: transparent;
+}
+
+.form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 1em;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #383737;
+}
+
+.form-button {
+  background-color: #000;
+  color: #fff;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.form-button:hover {
+  background-color: #383737;
+}
+
+.form-error {
+  color: #ff0000;
+  font-size: 0.875rem;
+  margin-top: -1.5rem;
+  margin-bottom: 1rem;
+}
+
+.form-link {
+  font-weight: bold;
+  transition: color 0.3s ease-in-out;
+}
+
+.form-link:hover {
+  color: #383737;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.form-title {
+    font-size: 2.25rem;
+    font-weight: bold;  
+    margin-bottom: 3rem; 
+}
+
+/* Custom class for aligning currency symbol */
+.price-input-wrapper {
+  position: relative;
+}
+
+.price-input-wrapper .currency-symbol {
+  position: absolute;
+  top: 50%;
+  left: 1rem; 
+  transform: translateY(-50%);
+  color: #6b7280; 
+  font-size: 1.125rem; 
+  pointer-events: none; 
+}
+
+.price-input {
+  padding-left: 3rem; 
+  text-indent: 0; 
+}
+
+.box-inputbar {
+  margin-top: 0.5rem; 
+  display: block; 
+  width: 100%; 
+  border-radius: 0.375rem; 
+  border-width: 2px; 
+  border-color: #d1d5db; 
+  background-color: #f3f4f6; 
+  color: #4b5563; 
+  font-size: 1.125rem; 
+  padding: 0.75rem; 
+  outline: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); 
+}
+
+.page_title  {
+  font-size: 2rem;
+  color: #2D3748; 
+  padding-bottom: 20px;
+  font-weight: light;
+  margin-bottom: 32px;
+}
+
+.link-button
+{
+  background-color: #000;
+  color: #fff;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.link-button:hover {
+  background-color: #383737;
+  text-decoration: none;
+  color: white; 
+}
+
+.dropdown-hover {
+  transition: background-color 0.2s, color 0.2s !important; 
+}
+
+.dropdown-hover:hover {
+  background-color: #1F2937 !important; /* Dark background */
+  color: white !important; /* White text */
+}
+
+/* General table styles */
+.custom-table {
+  border: 3px solid black; /* Thicker outer border */
+  width: 100%; /* Full width of the container */
+  max-width: 800px; /* Set a maximum width */
+  border-collapse: collapse; /* Prevents double borders */
+}
+
+.custom-table th,
+.custom-table td {
+    border: 2px solid black; /* Thicker inner cell borders */
+    padding: 12px; /* Padding for cells */
+}
+
+.custom-table thead {
+    background-color: black; /* Black header */
+    color: white; /* White text for header */
+}
+
+.custom-table tbody {
+    background-color: #343a40; /* Dark background for body */
+    color: white; /* White text for body */
+}
+
+.custom-table tbody tr:hover {
+    background-color: #495057; /* Darker gray on row hover */
+}
+
+.custom-table tbody td {
+    padding: 10px; /* Slightly reduced padding for body cells */
+}
+
+
+
